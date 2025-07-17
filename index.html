@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V.B.R.I.S. - Haikyuu!! RPG</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><span class="highlight-text">V.B.R.I.S.</span></h1>
+            <h2><span class="sub-highlight-text">Volei :)</span></h2>
+        </div>
+        <nav>
+            <button class="nav-button active" data-section="character-creation-section"><i class="fas fa-plus-circle"></i> Novo Jogador</button>
+            <button class="nav-button" data-section="character-list-section"><i class="fas fa-users"></i> Lista de Jogadores</button>
+            <button class="nav-button" data-section="character-details-section" id="details-nav-button" style="display:none;"><i class="fas fa-user-circle"></i> Detalhes do Jogador</button>
+            <nav>
+    <a href="index.html" class="nav-button active"><i class="fas fa-users-cog"></i> Gerenciar Jogadores</a>
+    <a href="como-jogar.html" class="nav-button"><i class="fas fa-question-circle"></i> Como Jogar</a>
+</nav>
+        </nav>
+    </header>
+
+    <main>
+        <section id="character-creation-section" class="page-section active">
+            <h3 class="section-title"><i class="fas fa-user-plus"></i> Novo Registro de Jogador Paranormal</h3>
+            <form id="character-form">
+                <div class="form-group">
+                    <label for="nome"><i class="fas fa-signature"></i> Nome do Jogador:</label>
+                    <input type="text" id="nome" required placeholder="Ex: Shoyo Hinata">
+                </div>
+
+                <div class="form-group">
+                    <label for="escola"><i class="fas fa-school"></i> Escola/Time:</label>
+                    <input type="text" id="escola" required placeholder="Ex: Karasuno">
+                </div>
+
+                <div class="form-group">
+                    <label for="origem"><i class="fas fa-globe-americas"></i> Origem:</label>
+                    <select id="origem" required>
+                        <option value="">Selecione uma Origem</option>
+                        <option value="Prodigio">Prodígio</option>
+                        <option value="Trabalho Duro">Trabalho Duro</option>
+                        <option value="Rivalidade">Rivalidade</option>
+                        <option value="Legado Familiar">Legado Familiar</option>
+                        <option value="Azarao">Azarão</option>
+                        <option value="Acidente">Acidente (Paranormal)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="classe"><i class="fas fa-volleyball-ball"></i> Classe (Posição):</label>
+                    <select id="classe" required>
+                        <option value="">Selecione uma Classe</option>
+                        <option value="Atacante">Atacante</option>
+                        <option value="Central">Central</option>
+                        <option value="Levantador">Levantador</option>
+                        <option value="Libero">Líbero</option>
+                        <option value="Oposto">Oposto</option>
+                    </select>
+                </div>
+
+                <h4 class="subsection-title"><i class="fas fa-fist-raised"></i> Atributos <span class="small-text">(10 pontos, máx. 3 por atributo em criação)</span></h4>
+                <div class="attributes-grid">
+                    <div class="attr-item">
+                        <label for="forca"><i class="fas fa-dumbbell"></i> Força (FOR):</label>
+                        <input type="number" id="forca" min="0" max="3" value="0">
+                    </div>
+                    <div class="attr-item">
+                        <label for="agilidade"><i class="fas fa-running"></i> Agilidade (AGI):</label>
+                        <input type="number" id="agilidade" min="0" max="3" value="0">
+                    </div>
+                    <div class="attr-item">
+                        <label for="vigor"><i class="fas fa-heartbeat"></i> Vigor (VIG):</label>
+                        <input type="number" id="vigor" min="0" max="3" value="0">
+                    </div>
+                    <div class="attr-item">
+                        <label for="presenca"><i class="fas fa-star"></i> Presença (PRE):</label>
+                        <input type="number" id="presenca" min="0" max="3" value="0">
+                    </div>
+                    <div class="attr-item">
+                        <label for="intelecto"><i class="fas fa-brain"></i> Intelecto (INT):</label>
+                        <input type="number" id="intelecto" min="0" max="3" value="0">
+                    </div>
+                    <div class="attr-item">
+                        <label for="percepcao"><i class="fas fa-eye"></i> Percepção (PER):</label>
+                        <input type="number" id="percepcao" min="0" max="3" value="0">
+                    </div>
+                    <div class="attr-item total-points">
+                        <label><i class="fas fa-coins"></i> Pontos Restantes:</label>
+                        <span id="pontos-restantes">10</span>
+                    </div>
+                </div>
+
+                <h4 class="subsection-title"><i class="fas fa-chart-line"></i> Perícias <span class="small-text">(3 pontos adicionais para treinar/especializar)</span></h4>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <label>Acrobacia (AGI):</label>
+                        <select id="acrobacia">
+                            <option value="0">Não Treinado</option>
+                            <option value="5">Treinado (+5)</option>
+                            <option value="10">Especialista (+10)</option>
+                        </select>
+                    </div>
+                    <div class="skill-item">
+                        <label>Atletismo (FOR):</label>
+                        <select id="atletismo">
+                            <option value="0">Não Treinado</option>
+                            <option value="5">Treinado (+5)</option>
+                            <option value="10">Especialista (+10)</option>
+                        </select>
+                    </div>
+                    <div class="skill-item">
+                        <label>Bloqueio (FOR):</label>
+                        <select id="bloqueio">
+                            <option value="0">Não Treinado</option>
+                            <option value="5">Treinado (+5)</option>
+                            <option value="10">Especialista (+10)</option>
+                        </select>
+                    </div>
+                    <div class="skill-item">
+                        <label>Defesa (AGI):</label>
+                        <select id="defesa">
+                            <option value="0">Não Treinado</option>
+                            <option value="5">Treinado (+5)</option>
+                            <option value="10">Especialista (+10)</option>
+                        </select>
+                    </div>
+                    <div class="skill-item">
+                        <label>Determinação (VIG):</label>
+                        <select id="determinacao">
+                            <option value="0">Não Treinado</option>
+                            <option value="5">Treinado (+5)</option>
+                            <option value="10">Especialista (+10)</option>
+                        </select>
+                    </div>
+                    <div class="skill-item">
+                        <label>Foco (INT):</label>
+                        <select id="foco">
+                            <option value="0">Não Treinado</option>
+                            <option value="5">Treinado (+5)</option>
+                            <option value="10">Especialista (+10)</option>
+                        </select>
+                    </div>
+                    <div class="skill-item">
+                        <label>Fortitude (VIG):</label>
+                        <select id="fortitude">
+                            <option value="0">Não Treinado</option>
+                            <option value="5">Treinado (+5)</option>
+                            <option value="10">Especialista (+10)</option>
+                        </select>
+                    </div>
+                    <div class="skill-item">
+                        <label>Intimidação (PRE):</label>
+                        <select id="intimidacao">
+                            <option value="0">Não Treinado</option>
+                            <option value="5">Treinado (+5)</option>
+                            <option value="10">Especialista (+10)</option>
+                        </select>
+                    </div>
+                    <div class="skill-item">
+                        <label>Liderança (PRE):</label>
+                        <select id="lideranca">
+                            <option value="0">Não Treinado</option>
+                            <option value="5">Treinado (+5)</option>
+                            <option value="10">Especialista (+10)</option>
+                        </select>
+                    </div>
+                    <div class="skill-item">
+                        <label>Manobra (AGI):</label>
+                        <select id="manobra">
+                            <option value="0">Não Treinado</option>
+                            <option value="5">Treinado (+5)</option>
+                            <option value="10">Especialista (+10)</option>
+                        </select>
+                    </div>
+                    <div class="skill-item">
+                        <label>Percepção (PER):</label>
+                        <select id="percepcao-skill">
+                            <option value="0">Não Treinado</option>
+                            <option value="5">Treinado (+5)</option>
+                            <option value="10">Especialista (+10)</option>
+                        </select>
+                    </div>
+                    <div class="skill-item">
+                        <label>Pontaria (AGI):</label>
+                        <select id="pontaria">
+                            <option value="0">Não Treinado</option>
+                            <option value="5">Treinado (+5)</option>
+                            <option value="10">Especialista (+10)</option>
+                        </select>
+                    </div>
+                    <div class="skill-item">
+                        <label>Reflexos (AGI):</label>
+                        <select id="reflexos">
+                            <option value="0">Não Treinado</option>
+                            <option value="5">Treinado (+5)</option>
+                            <option value="10">Especialista (+10)</option>
+                        </select>
+                    </div>
+                    <div class="skill-item">
+                        <label>Tática (INT):</label>
+                        <select id="tatica">
+                            <option value="0">Não Treinado</option>
+                            <option value="5">Treinado (+5)</option>
+                            <option value="10">Especialista (+10)</option>
+                        </select>
+                    </div>
+                    <div class="skill-item total-points">
+                        <label><i class="fas fa-puzzle-piece"></i> Pontos de Perícia Restantes:</label>
+                        <span id="pontos-pericia-restantes">3</span>
+                    </div>
+                    <div class="skill-item total-points">
+                        <label><i class="fas fa-medal"></i> Especialistas Utilizados:</label>
+                        <span id="especialistas-utilizados">0/1</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Registrar Jogador</button>
+            </form>
+        </section>
+
+        <section id="character-list-section" class="page-section">
+            <h3 class="section-title"><i class="fas fa-list-alt"></i> Jogadores Registrados</h3>
+            <div id="players-container">
+                <p class="no-players-message"><i class="fas fa-exclamation-circle"></i> Nenhum jogador registrado ainda. Crie um acima!</p>
+            </div>
+        </section>
+
+        <section id="character-details-section" class="page-section hidden-section">
+            <h3 class="section-title" id="current-player-name"><i class="fas fa-user-check"></i> Detalhes do Jogador: [Nome do Jogador]</h3>
+            <nav class="sub-nav">
+                <button class="sub-nav-button active" data-sub-section="sub-personagem"><i class="fas fa-user-alt"></i> Personagem</button>
+                <button class="sub-nav-button" data-sub-section="sub-combate"><i class="fas fa-fist-raised"></i> Combate</button>
+                <button class="sub-nav-button" data-sub-section="sub-habilidades"><i class="fas fa-bolt"></i> Habilidades</button>
+                <button class="sub-nav-button" data-sub-section="sub-descricao"><i class="fas fa-book"></i> Descrição</button>
+            </nav>
+
+            <div id="character-detail-content">
+                <div id="sub-personagem" class="sub-page-section active">
+                    <h4 class="subsection-title"><i class="fas fa-info-circle"></i> Informações Essenciais</h4>
+                    <p><strong>Nome:</strong> <span id="detail-nome"></span></p>
+                    <p><strong>Escola/Time:</strong> <span id="detail-escola"></span></p>
+                    <p><strong>Origem:</strong> <span id="detail-origem"></span></p>
+                    <p><strong>Classe (Posição):</strong> <span id="detail-classe"></span></p>
+                    <p><strong>Nível de Ameaça (NA):</strong> <span id="detail-na"></span></p>
+
+                    <h4 class="subsection-title"><i class="fas fa-battery-half"></i> Recursos</h4>
+                    <p><strong>Pontos de Vida (PV):</strong> <span id="detail-pv"></span> / <span id="detail-max-pv"></span></p>
+                    <p><strong>Pontos de Esforço (PE):</strong> <span id="detail-pe"></span> / <span id="detail-max-pe"></span></p>
+
+                    <h4 class="subsection-title"><i class="fas fa-star-of-life"></i> Atributos</h4>
+                    <div class="attributes-display" id="detail-atributos"></div>
+
+                    <button class="btn-secondary" id="btn-increase-na"><i class="fas fa-level-up-alt"></i> Aumentar Nível de Ameaça (DEBUG)</button>
+                </div>
+
+                <div id="sub-combate" class="sub-page-section">
+                    <h4 class="subsection-title"><i class="fas fa-chart-bar"></i> Perícias de Combate (Vôlei)</h4>
+                    <div class="skills-display" id="detail-pericias"></div>
+                </div>
+
+                <div id="sub-habilidades" class="sub-page-section">
+                    <h4 class="subsection-title"><i class="fas fa-magic"></i> Habilidades Paranormais Despertadas</h4>
+                    <div class="abilities-display" id="detail-habilidades"></div>
+
+                    <h4 class="subsection-title"><i class="fas fa-plus-square"></i> Adicionar Nova Habilidade</h4>
+                    <div class="add-ability-form">
+                        <select id="select-new-ability">
+                            <option value="">Selecione uma Habilidade</option>
+                            </select>
+                        <button class="btn-secondary" id="add-ability-btn"><i class="fas fa-bolt"></i> Adicionar Habilidade</button>
+                    </div>
+                    <small class="hint-text"><i class="fas fa-info-circle"></i> Habilidades adicionais custam PE ou são desbloqueadas com NA.</small>
+                </div>
+
+                <div id="sub-descricao" class="sub-page-section">
+                    <h4 class="subsection-title"><i class="fas fa-scroll"></i> Lore do Personagem</h4>
+                    <textarea id="detail-lore" rows="5" placeholder="História de fundo, eventos chave na vida do jogador..."></textarea>
+
+                    <h4 class="subsection-title"><i class="fas fa-address-card"></i> Descrição Física e Personalidade</h4>
+                    <textarea id="detail-descricao-fisica" rows="5" placeholder="Como o personagem se parece, sua postura, maneirismos, traços de personalidade..."></textarea>
+
+                    <h4 class="subsection-title"><i class="fas fa-bullseye"></i> Motivações e Sonhos</h4>
+                    <textarea id="detail-motivacoes" rows="3" placeholder="O que o move? Seus objetivos no vôlei e fora dele..."></textarea>
+
+                    <h4 class="subsection-title"><i class="fas fa-clipboard"></i> Anotações do Mestre/Jogador</h4>
+                    <textarea id="detail-anotacoes" rows="5" placeholder="Qualquer anotação relevante para a campanha ou desenvolvimento do personagem."></textarea>
+
+                    <button class="btn-primary" id="save-description-btn"><i class="fas fa-save"></i> Salvar Descrição</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        
+    </footer>
+
+    <script src="habilidades.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
