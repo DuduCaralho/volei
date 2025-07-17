@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V.B.R.I.S. - Como Jogar</title>
+    <link rel="stylesheet" href="como-jogar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><span class="highlight-text">V.B.R.I.S.</span></h1>
+            <h2><span class="sub-highlight-text">Volleyball & Beyond Registration and Inspection System</span></h2>
+        </div>
+        <nav>
+            <a href="index.html" class="nav-button"><i class="fas fa-users-cog"></i> Gerenciar Jogadores</a>
+            <a href="como-jogar.html" class="nav-button active"><i class="fas fa-question-circle"></i> Como Jogar</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="rules-section active">
+            <h3 class="section-title"><i class="fas fa-volleyball-ball"></i> Haikyuu!! RPG: Como Jogar</h3>
+
+            <div class="rules-category">
+                <h4 class="subsection-title"><i class="fas fa-user-plus"></i> 1. Criação de Personagem</h4>
+                <div class="rule-block">
+                    <h5>Atributos</h5>
+                    <p>Você possui <strong>10 pontos</strong> para distribuir entre 6 atributos, com um máximo de 3 em qualquer atributo durante a criação. Eles definem sua capacidade física e mental:</p>
+                    <ul>
+                        <li><i class="fas fa-dumbbell icon-for"></i> <strong>Força (FOR):</strong> Poder de ataque, salto, bloqueio.</li>
+                        <li><i class="fas fa-running icon-agi"></i> <strong>Agilidade (AGI):</strong> Velocidade, reflexos, movimento.</li>
+                        <li><i class="fas fa-heartbeat icon-vig"></i> <strong>Vigor (VIG):</strong> Stamina, resistência à fadiga, recuperação.</li>
+                        <li><i class="fas fa-star icon-pre"></i> <strong>Presença (PRE):</strong> Carisma, liderança, presença em quadra.</li>
+                        <li><i class="fas fa-brain icon-int"></i> <strong>Intelecto (INT):</strong> Tática, game sense, estratégia.</li>
+                        <li><i class="fas fa-eye icon-per"></i> <strong>Percepção (PER):</strong> Consciência de quadra, antecipação.</li>
+                    </ul>
+                </div>
+                <div class="rule-block">
+                    <h5>Classes (Posições)</h5>
+                    <p>Sua classe é sua posição no vôlei e concede perícias iniciais e uma habilidade única:</p>
+                    <ul>
+                        <li><i class="fas fa-bullseye icon-classe"></i> <strong>Atacante:</strong> Foco em FOR/VIG. Especialista em ataques poderosos.</li>
+                        <li><i class="fas fa-shield-alt icon-classe"></i> <strong>Central:</strong> Foco em FOR/PER. Especialista em bloqueios e ataques rápidos.</li>
+                        <li><i class="fas fa-hand-rock icon-classe"></i> <strong>Levantador:</strong> Foco em INT/PRE. O cérebro do time, orquestrando ataques.</li>
+                        <li><i class="fas fa-hands-helping icon-classe"></i> <strong>Líbero:</strong> Foco em AGI/PER. Especialista em defesa e recepção.</li>
+                        <li><i class="fas fa-fire-alt icon-classe"></i> <strong>Oposto:</strong> Foco em FOR/VIG. Versátil e poderoso na ofensiva.</li>
+                    </ul>
+                </div>
+                <div class="rule-block">
+                    <h5>Perícias</h5>
+                    <p>Suas perícias refletem seu treinamento. Perícias iniciais da Classe e Origem são <strong>Treinadas (+5) gratuitamente</strong>. Você tem <strong>3 Pontos de Perícia adicionais</strong> para gastar:</p>
+                    <ul>
+                        <li><strong>Treinado:</strong> +5 ao teste da perícia (custo: 1 Ponto de Perícia).</li>
+                        <li><strong>Especialista:</strong> +10 ao teste da perícia (custo: 2 Pontos de Perícia). Máximo de 1 perícia como Especialista.</li>
+                    </ul>
+                    <p>Exemplos de Perícias: Acrobacia, Atletismo, Bloqueio, Defesa, Tática, Pontaria, etc.</p>
+                </div>
+                <div class="rule-block">
+                    <h5>Saúde (PV) e Pontos de Esforço (PE)</h5>
+                    <ul>
+                        <li><i class="fas fa-heart icon-pv"></i> <strong>PV (Pontos de Vida):</strong> $10 + VIG$. Representam sua capacidade física. Quando 0, você está fora de jogo.</li>
+                        <li><i class="fas fa-bolt icon-pe"></i> <strong>PE (Pontos de Esforço):</strong> $5 + PRE + INT$. Representam energia para habilidades especiais. Gastos para ativar e recuperados entre partidas.</li>
+                    </ul>
+                </div>
+                <div class="rule-block">
+                    <h5>Origem</h5>
+                    <p>Seu passado que te conecta ao vôlei e pode despertar habilidades. Cada Origem oferece uma perícia Treinada gratuita e um benefício:</p>
+                    <ul>
+                        <li><i class="fas fa-award icon-origem"></i> <strong>Prodígio:</strong> Talento natural. Perícia: Manobra.</li>
+                        <li><i class="fas fa-hard-hat icon-origem"></i> <strong>Trabalho Duro:</strong> Esforço e dedicação. Perícia: Determinação.</li>
+                        <li><i class="fas fa-user-friends icon-origem"></i> <strong>Rivalidade:</strong> Impulsionado por um oponente. Perícia: Intimidação.</li>
+                        <li><i class="fas fa-users icon-origem"></i> <strong>Legado Familiar:</strong> Vôlei no sangue. Perícia: Tática.</li>
+                        <li><i class="fas fa-hand-fist icon-origem"></i> <strong>Azarão:</strong> Ninguém esperava nada de você. Perícia: Fortitude.</li>
+                        <li><i class="fas fa-radiation icon-origem"></i> <strong>Acidente (Paranormal):</strong> Evento incomum desencadeou algo. Perícia: Percepção.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="rules-category">
+                <h4 class="subsection-title"><i class="fas fa-gamepad"></i> 2. O Jogo (A Partida)</h4>
+                <div class="rule-block">
+                    <h5>Rodada de Jogo</h5>
+                    <p>Uma partida é dividida em Sets, e Sets em Rodadas. Cada rodada representa um momento chave do rally:</p>
+                    <ol>
+                        <li><strong>Iniciativa:</strong> Rola-se AGI + Percepção. Maior resultado age primeiro.</li>
+                        <li><strong>Ações:</strong> Cada jogador pode realizar uma Ação Padrão (ataque, bloqueio, etc.), uma Ação de Movimento e uma Ação Livre.</li>
+                        <li><strong>Resolução:</strong> O Mestre descreve o resultado das ações.</li>
+                        <li><strong>Pontuação:</strong> Um ponto é marcado e o Set avança.</li>
+                    </ol>
+                </div>
+                <div class="rule-block">
+                    <h5>Testes de Habilidade</h5>
+                    <p>Ações são resolvidas com $1d20 + Atributo + Bônus de Perícia$. Você precisa igualar ou superar a CD (Classe de Dificuldade).</p>
+                    <ul>
+                        <li><strong>CD 10:</strong> Ações Simples (passe fácil).</li>
+                        <li><strong>CD 15:</strong> Ações Moderadas (ataque normal).</li>
+                        <li><strong>CD 20:</strong> Ações Difíceis (bloqueio duplo).</li>
+                        <li><strong>CD 25+:</strong> Ações Heroicas (saque jornada, ataque sincronizado).</li>
+                        <li><strong>Testes Opostos:</strong> Dois jogadores rolam e o maior resultado vence (Ex: Atacante vs. Bloqueador).</li>
+                    </ul>
+                    <p><strong>Sucesso por Margem:</strong> Sucesso por 5+ é excepcional. Falha por 5+ pode ter consequências negativas.</p>
+                </div>
+                <div class="rule-block">
+                    <h5>Ações Comuns no Vôlei</h5>
+                    <ul>
+                        <li><i class="fas fa-hand-point-right icon-acao"></i> <strong>Saque:</strong> Teste de AGI + Pontaria (simples) ou FOR + Pontaria (viagem).</li>
+                        <li><i class="fas fa-compress-arrows-alt icon-acao"></i> <strong>Recepção/Defesa:</strong> Teste de AGI + Defesa.</li>
+                        <li><i class="fas fa-hand-paper icon-acao"></i> <strong>Levantamento:</strong> Teste de INT + Manobra.</li>
+                        <li><i class="fas fa-fist-raised icon-acao"></i> <strong>Ataque:</strong> Teste de FOR + Atletismo. Causa "Dano" aos PVs adversários ou condições.</li>
+                        <li><i class="fas fa-stop icon-acao"></i> <strong>Bloqueio:</strong> Teste de FOR + Bloqueio (teste oposto).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="rules-category">
+                <h4 class="subsection-title"><i class="fas fa-meteor"></i> 3. O Paranormal no Vôlei (Habilidades)</h4>
+                <div class="rule-block">
+                    <p>Habilidades são manifestações únicas de talento e "aura" do jogador, consumindo <strong>Pontos de Esforço (PE)</strong>. Elas são categorizadas por "Elementos Paranormais" do Vôlei:</p>
+                    <ul>
+                        <li><i class="fas fa-wind icon-element"></i> <strong>Aura de Vento (AGI):</strong> Velocidade, agilidade, fluidez.</li>
+                        <li><i class="fas fa-mountain icon-element"></i> <strong>Aura de Terra (FOR):</strong> Força, impacto, solidez, resistência.</li>
+                        <li><i class="fas fa-water icon-element"></i> <strong>Aura de Água (INT):</strong> Adaptabilidade, tática, percepção, controle.</li>
+                        <li><i class="fas fa-fire-alt icon-element"></i> <strong>Aura de Fogo (PRE):</strong> Paixão, liderança, impacto psicológico, explosão.</li>
+                        <li><i class="fas fa-sun icon-element"></i> <strong>Aura de Luz (PER):</strong> Premonição, antecipação, visão expandida, precisão.</li>
+                        <li><i class="fas fa-moon icon-element"></i> <strong>Aura de Escuridão (VIG):</strong> Resiliência, persistência, absorção de impacto, superação.</li>
+                    </ul>
+                    <p>As habilidades são detalhadas na seção "Habilidades" do V.B.R.I.S. principal.</p>
+                </div>
+            </div>
+
+            <div class="rules-category">
+                <h4 class="subsection-title"><i class="fas fa-chart-pie"></i> 4. Progressão e Despertar</h4>
+                <div class="rule-block">
+                    <h5>Pontos de Experiência (XP) e Nível de Ameaça (NA)</h5>
+                    <p>Você ganha XP ao final de cada partida. A cada <strong>5 XP</strong>, seu personagem sobe de <strong>Nível de Ameaça (NA)</strong>, refletindo o poder crescente de suas habilidades.</p>
+                    <ul>
+                        <li><strong>Vitória:</strong> 3 XP</li>
+                        <li><strong>Derrota Honrosa:</strong> 2 XP</li>
+                        <li><strong>Derrota:</strong> 1 XP</li>
+                        <li><strong>Momentos Marcantes:</strong> 1 XP (por feitos excepcionais)</li>
+                        <li><strong>Desenvolvimento:</strong> 1 XP (por avançar sua história)</li>
+                    </ul>
+                    <p>Ao subir de NA, você ganha <strong>+1 PE</strong>. A cada 2 NA, você ganha <strong>+1 Ponto em Atributo OU +1 Ponto em Perícia</strong>.</p>
+                </div>
+                <div class="rule-block">
+                    <h5>Despertar de Habilidades</h5>
+                    <p>No novo NA, você pode escolher aprender uma nova Habilidade do elemento que já possui afinidade ou de um novo elemento. Habilidades mais avançadas são liberadas a partir do NA 4.</p>
+                </div>
+            </div>
+
+            <div class="rules-category">
+                <h4 class="subsection-title"><i class="fas fa-dice-d20"></i> 5. O Mestre (Narrador)</h4>
+                <div class="rule-block">
+                    <p>O Mestre guia a história, controla os times adversários e os NPCs. Ele pode introduzir elementos mais explícitos do paranormal na narrativa, fora da quadra, se a mesa desejar.</p>
+                    <p>Times adversários também possuem "Níveis de Ameaça" e habilidades. Prepare-se para enfrentar rivais cada vez mais poderosos e com talentos incomuns!</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+    
+    </footer>
+
+    <script src="como-jogar.js"></script>
+</body>
+</html>
