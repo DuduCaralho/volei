@@ -1,0 +1,320 @@
+/* como-jogar.css */
+
+/* Cores e Fontes (Reutilizadas do style.css principal) */
+:root {
+    --primary-bg-color: #0f1c2d;
+    --secondary-bg-color: #1a2a43;
+    --card-bg-color: #2b3e5c;
+    --text-color: #e0e6f0;
+    --heading-color: #90d4f7;
+    --accent-color: #3b82f6;
+    --highlight-color: #ff4a6a;
+    --border-color: #4a5c7f;
+    --input-bg-color: #0d1a29;
+    --button-primary-bg: var(--highlight-color);
+    --button-primary-hover: #e63955;
+    --button-secondary-bg: var(--accent-color);
+    --button-secondary-hover: #2b70f0;
+
+    --font-heading: 'Bebas Neue', sans-serif;
+    --font-body: 'Open Sans', sans-serif;
+
+    --shadow-light: rgba(0, 0, 0, 0.2);
+    --shadow-medium: rgba(0, 0, 0, 0.4);
+    --shadow-strong: rgba(0, 0, 0, 0.6);
+}
+
+body {
+    font-family: var(--font-body);
+    margin: 0;
+    padding: 0;
+    background-color: var(--primary-bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-image: url('https://raw.githubusercontent.com/google-gemini/multimodality/main/haikyuu_bg.webp'); /* Mesma imagem de fundo */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 28, 45, 0.85);
+    z-index: -1;
+}
+
+header {
+    background-color: rgba(15, 28, 45, 0.95);
+    color: var(--text-color);
+    padding: 20px 0;
+    text-align: center;
+    border-bottom: 3px solid var(--highlight-color);
+    box-shadow: 0 4px 10px var(--shadow-medium);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-content {
+    margin-bottom: 15px;
+}
+
+header h1 {
+    font-family: var(--font-heading);
+    margin: 0;
+    font-size: 3.5em;
+    letter-spacing: 2px;
+    text-shadow: 3px 3px 6px var(--shadow-strong);
+}
+
+.highlight-text {
+    color: var(--highlight-color);
+}
+
+header h2 {
+    font-family: var(--font-body);
+    margin: 5px 0 0;
+    font-size: 1.3em;
+    font-weight: 600;
+    color: var(--heading-color);
+}
+
+.sub-highlight-text {
+    color: var(--accent-color);
+}
+
+/* Navegação Principal - Agora com links <a> */
+nav {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.nav-button {
+    background-color: var(--button-secondary-bg);
+    color: var(--text-color);
+    border: none;
+    padding: 14px 30px;
+    border-radius: 8px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    min-width: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
+    box-shadow: 0 2px 5px var(--shadow-light);
+    text-decoration: none; /* Remove underline for links */
+}
+
+.nav-button:hover {
+    background-color: var(--button-secondary-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 12px var(--shadow-medium);
+}
+
+.nav-button.active {
+    background-color: var(--button-primary-bg);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px var(--highlight-color);
+    border: 1px solid var(--text-color);
+}
+
+main {
+    padding: 30px 20px;
+    max-width: 900px; /* Um pouco mais estreito para o texto das regras */
+    margin: 30px auto;
+    flex-grow: 1;
+}
+
+.rules-section {
+    background-color: var(--secondary-bg-color);
+    padding: 35px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px var(--shadow-medium);
+    border: 1px solid var(--border-color);
+}
+
+.section-title {
+    font-family: var(--font-heading);
+    color: var(--highlight-color); /* Título principal mais vibrante */
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.2em;
+    letter-spacing: 1px;
+    border-bottom: 2px solid var(--accent-color); /* Borda diferente */
+    padding-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.rules-category {
+    margin-bottom: 40px;
+    padding: 20px;
+    background-color: var(--card-bg-color);
+    border-radius: 10px;
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+}
+
+.subsection-title {
+    font-family: var(--font-heading); /* Títulos das categorias também com Bebas Neue */
+    color: var(--heading-color);
+    margin-top: 10px;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px dashed var(--accent-color);
+    padding-bottom: 10px;
+}
+
+.rule-block {
+    background-color: var(--input-bg-color);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 5px var(--shadow-light);
+}
+
+.rule-block h5 {
+    color: var(--accent-color);
+    font-size: 1.3em;
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 1px dotted var(--border-color);
+    padding-bottom: 5px;
+}
+
+.rule-block p, .rule-block ul, .rule-block ol {
+    margin-bottom: 10px;
+    font-size: 1em;
+    line-height: 1.8;
+}
+
+.rule-block ul, .rule-block ol {
+    padding-left: 25px;
+}
+
+.rule-block li {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.rule-block strong {
+    color: var(--highlight-color);
+}
+
+/* Cores para os ícones específicos dos atributos/elementos/ações */
+.icon-for, .icon-classe { color: #f39c12; } /* Laranja */
+.icon-agi, .icon-acao { color: #2ecc71; } /* Verde Esmeralda */
+.icon-vig, .icon-element { color: #e74c3c; } /* Vermelho forte */
+.icon-pre { color: #f1c40f; } /* Amarelo */
+.icon-int { color: #3498db; } /* Azul */
+.icon-per { color: #9b59b6; } /* Roxo */
+.icon-pv { color: #ff6347; } /* Tomato */
+.icon-pe { color: #1e90ff; } /* DodgerBlue */
+.icon-origem { color: #c0392b; } /* Bordô */
+
+
+footer {
+    text-align: center;
+    padding: 25px;
+    background-color: rgba(15, 28, 45, 0.95);
+    color: var(--text-color);
+    margin-top: auto;
+    border-top: 3px solid var(--highlight-color);
+    box-shadow: 0 -4px 10px var(--shadow-medium);
+}
+
+footer p {
+    margin: 0;
+    font-size: 0.9em;
+    color: var(--heading-color);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    header {
+        padding: 15px 0;
+    }
+
+    header h1 {
+        font-size: 2.5em;
+    }
+
+    header h2 {
+        font-size: 1em;
+    }
+
+    .nav-button {
+        width: calc(50% - 10px);
+        font-size: 1em;
+        padding: 10px 15px;
+    }
+
+    main {
+        padding: 15px;
+        margin: 15px auto;
+    }
+
+    .rules-section {
+        padding: 20px;
+    }
+
+    .section-title {
+        font-size: 1.8em;
+        gap: 8px;
+        padding-bottom: 10px;
+    }
+
+    .subsection-title {
+        font-size: 1.5em;
+        gap: 6px;
+        padding-bottom: 5px;
+    }
+
+    .rules-category {
+        padding: 15px;
+    }
+
+    .rule-block {
+        padding: 15px;
+    }
+
+    .rule-block h5 {
+        font-size: 1.1em;
+    }
+
+    .rule-block p, .rule-block ul, .rule-block ol {
+        font-size: 0.95em;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 2em;
+    }
+    .nav-button {
+        width: 100%;
+    }
+}
