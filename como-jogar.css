@@ -42,7 +42,7 @@ body {
 
 body::before {
     content: '';
-    position: absolute;
+    position: fixed; /* Alterado de absolute para fixed para cobrir toda a viewport */
     top: 0;
     left: 0;
     width: 100%;
@@ -58,9 +58,10 @@ header {
     text-align: center;
     border-bottom: 3px solid var(--highlight-color);
     box-shadow: 0 4px 10px var(--shadow-medium);
-    position: sticky;
+    position: sticky; /* Sticky header */
     top: 0;
     z-index: 1000;
+    width: 100%;
 }
 
 .header-content {
@@ -227,13 +228,28 @@ main {
 /* Cores para os ícones específicos dos atributos/elementos/ações */
 .icon-for, .icon-classe { color: #f39c12; } /* Laranja */
 .icon-agi, .icon-acao { color: #2ecc71; } /* Verde Esmeralda */
-.icon-vig, .icon-element { color: #e74c3c; } /* Vermelho forte */
+.icon-vig { color: #e74c3c; } /* Vermelho forte */
 .icon-pre { color: #f1c40f; } /* Amarelo */
 .icon-int { color: #3498db; } /* Azul */
 .icon-per { color: #9b59b6; } /* Roxo */
 .icon-pv { color: #ff6347; } /* Tomato */
 .icon-pe { color: #1e90ff; } /* DodgerBlue */
 .icon-origem { color: #c0392b; } /* Bordô */
+
+/* Novos icon-element para os estilos de jogo */
+.icon-element {
+    color: #ffd700; /* Dourado para os elementos gerais */
+}
+.icon-element.fa-wind { color: #8be4f7; } /* Azul claro para vento */
+.icon-element.fa-hammer { color: #a0a0a0; } /* Cinza para muralha */
+.icon-element.fa-water { color: #4fc3f7; } /* Azul água para fluxo */
+.icon-element.fa-fire-alt { color: #ff8c00; } /* Laranja fogo para faísca */
+.icon-element.fa-eye { color: #9c27b0; } /* Roxo para visão */
+.icon-element.fa-moon { color: #616161; } /* Cinza escuro para sombra */
+.icon-element.fa-fist-raised { color: #ff5722; } /* Laranja avermelhado para ataque implacável */
+.icon-element.fa-shield-alt { color: #7cb342; } /* Verde escudo para guardião da rede */
+.icon-element.fa-chess-king { color: #ffe082; } /* Amarelo claro para orquestrador */
+.icon-element.fa-running { color: #26a69a; } /* Verde azulado para defensor imbatível */
 
 
 footer {
