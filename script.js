@@ -575,10 +575,12 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        const selectedOrigemData = origemPericiaBeneficio[origem];
+        const selectedOrigemData = origemPericiaBeneficio[origem]; // Esta linha já estava correta!
+
         if (selectedOrigemData) {
-            const originSkillId = origemPericiaBeneficio[selectedOrigem].pericia; // Use a variável 'origem'
-            if (pericias[originSkillId] < 5) {
+            // CORREÇÃO AQUI: Use 'origem' (que é a variável definida no escopo do submit)
+            const originSkillId = origemPericiaBeneficio[origem].pericia; // <--- LINHA CORRIGIDA
+            if (pericias[originSkillId] < 5) { // Only apply if not already Trained by Class
                 pericias[originSkillId] = 5;
             }
         }
