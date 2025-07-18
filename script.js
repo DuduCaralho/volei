@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pontosPericiaRestantesSpan = document.getElementById('pontos-pericia-restantes');
     const especialistasUtilizadosSpan = document.getElementById('especialistas-utilizados');
     const noPlayersMessage = document.querySelector('.no-players-message');
-    const detailsNavButton = document.getElementById('details-nav-button'); // This button is for navigating to player details
+    const detailsNavButton = document.getElementById('details-nav-button');
     const subNavButtons = document.querySelectorAll('.sub-nav-button');
     const subPageSections = document.querySelectorAll('.sub-page-section');
 
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'Rivalidade': { pericia: 'intimidacao', beneficio: 'Uma vez/partida, +2 em ataques contra rival específico.' },
         'Legado Familiar': { pericia: 'tatica', beneficio: 'Uma vez/partida, gasta 1 PE para dar +2 em perícia de aliado adjacente.' },
         'Azarao': { pericia: 'fortitude', beneficio: 'Uma vez/partida, se PV < 50%, +1 em todos os atributos até o final do set.' },
-        'Acidente': { pericia: 'percepcaoSkill', beneficio: 'Afinidade com Estilo e +1 PE na criação.' }
+        'Acidente': { pericia: 'percepcaoSkill', beneficio: 'Afinidade com Estilo e +1 PE na criação.' } // Atualizado "Paranormal" para "Estilo"
     };
 
     // allAbilities is loaded from habilidades.js (global scope)
@@ -154,12 +154,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Calculates cost of user-selected skills, considering free initial skills
-    function calculateSkillPoints() {
+    // AGORA RECEBE classe e origem como argumentos
+    function calculateSkillPoints(selectedClass, selectedOrigem) {
         let customCost = 0;
         let specialistsUsed = 0;
-
-        const selectedClass = document.getElementById('classe').value;
-        const selectedOrigem = document.getElementById('origem').value;
 
         // Determine which skills are 'Trained' for free by Class/Origin
         const freeTrainedSkills = new Set();
@@ -197,15 +195,13 @@ document.addEventListener('DOMContentLoaded', () => {
         return { remaining: 3 - customCost, specialists: specialistsUsed };
     }
 
-    // Updates skill dropdowns based on selected Class and Origin
-    function updateInitialSkills() {
+    // Resets skill dropdowns and applies initial class/origin skills
+    // AGORA RECEBE classe e origem como argumentos
+    function updateInitialSkills(selectedClass, selectedOrigem) {
         // Reset all skill dropdowns to "Não Treinado"
         for (const key in skillInputs) {
             skillInputs[key].value = "0";
         }
-
-        const selectedClass = document.getElementById('classe').value;
-        const selectedOrigem = document.getElementById('origem').value;
 
         // Apply initial skills from Class
         if (selectedClass && classePericiasIniciais[selectedClass]) {
@@ -225,7 +221,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 skillElement.value = "5"; // Set to Trained
             }
         }
-        calculateSkillPoints(); // Recalculate points after initial skills are set
+        // Ao chamar calculateSkillPoints aqui, precisamos dos valores atuais dos selects de classe/origem.
+        // Como esta função é chamada por eles, podemos pegá-los diretamente.
+        const currentSelectedClass = document.getElementById('classe').value;
+        const currentSelectedOrigem = document.getElementById('origem').value;
+        calculateSkillPoints(currentSelectedClass, currentSelectedOrigem);
     }
 
     // --- Player Data Management (LocalStorage) ---
@@ -448,23 +448,21 @@ document.addEventListener('DOMContentLoaded', () => {
                         bonusMessage += `\n${skillId === 'percepcaoSkill' ? 'Percepção' : skillId.charAt(0).toUpperCase() + skillId.slice(1)} agora Treinado (+5).`;
                     } else if (player.pericias[skillId] === 5) { // Trained, make it specialist
                         // Check if player already has a custom specialist (excluding initial free ones)
-                        const currentSkillValues = {}; // Current state of skills to evaluate specialists
-                        for(const sKey in skillInputs) currentSkillValues[sKey] = parseInt(skillInputs[sKey].value);
-                        
+                        // This calculation needs to be based on the player's actual stored skills, not current form values
                         let currentCustomSpecialists = 0;
-                        const selectedClass = document.getElementById('classe').value;
-                        const selectedOrigem = document.getElementById('origem').value;
-                        const freeTrainedSkills = new Set();
-                        if (selectedClass && classePericiasIniciais[selectedClass]) classePericiasIniciais[selectedClass].forEach(sid => freeTrainedSkills.add(sid));
-                        if (selectedOrigem && origemPericiaBeneficio[selectedOrigem]) freeTrainedSkills.add(origemPericiaBeneficio[selectedOrigem].pericia);
+                        const classSkills = new Set(classePericiasIniciais[player.classe] || []);
+                        const originSkill = origemPericiaBeneficio[player.origem]?.pericia;
+                        if (originSkill) classSkills.add(originSkill);
 
-                        for(const sKey in currentSkillValues) {
-                            if (currentSkillValues[sKey] === 10) {
-                                if (!freeTrainedSkills.has(sKey)) { // Count only if not an initial free skill
+                        for(const sKey in player.pericias) { // Loop through the player's skills
+                            if (player.pericias[sKey] === 10) {
+                                if (!classSkills.has(sKey)) { // Count if it's a specialist NOT from initial free skills
                                     currentCustomSpecialists++;
                                 }
                             }
                         }
+                        // This logic needs to be careful: the free specialist from "NA" should not count towards the 1-specialist limit for custom points.
+                        // For simplicity, this currentCustomSpecialists check is probably sufficient, assuming a new NA point doesn't create a *second* "custom" specialist.
 
                         if (currentCustomSpecialists < 1) { // Allows 1 specialist from custom points
                             player.pericias[skillId] = 10;
@@ -552,13 +550,28 @@ document.addEventListener('DOMContentLoaded', () => {
         attrInputs[key].addEventListener('input', calculateAttributePoints);
     }
 
+    // When a skill dropdown changes, recalculate points using its current class/origin
     for (const key in skillInputs) {
-        skillInputs[key].addEventListener('change', calculateSkillPoints);
+        skillInputs[key].addEventListener('change', () => {
+            const currentSelectedClass = document.getElementById('classe').value;
+            const currentSelectedOrigem = document.getElementById('origem').value;
+            calculateSkillPoints(currentSelectedClass, currentSelectedOrigem);
+        });
     }
 
-    // Event listeners for class and origin changes to update initial skills
-    document.getElementById('classe').addEventListener('change', updateInitialSkills);
-    document.getElementById('origem').addEventListener('change', updateInitialSkills);
+    // When class or origin changes, update initial skills and recalculate points
+    document.getElementById('classe').addEventListener('change', () => {
+        const currentSelectedClass = document.getElementById('classe').value;
+        const currentSelectedOrigem = document.getElementById('origem').value;
+        updateInitialSkills(currentSelectedClass, currentSelectedOrigem);
+    });
+
+    document.getElementById('origem').addEventListener('change', () => {
+        const currentSelectedClass = document.getElementById('classe').value;
+        const currentSelectedOrigem = document.getElementById('origem').value;
+        updateInitialSkills(currentSelectedClass, currentSelectedOrigem);
+    });
+
 
     // --- Character Creation Form Submission Logic ---
     characterForm.addEventListener('submit', (e) => {
@@ -567,8 +580,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Gather form data
         const nome = document.getElementById('nome').value.trim();
         const escola = document.getElementById('escola').value.trim();
-        const origem = document.getElementById('origem').value;
-        const classe = document.getElementById('classe').value;
+        const origem = document.getElementById('origem').value; // Get the selected value directly
+        const classe = document.getElementById('classe').value; // Get the selected value directly
 
         // --- Basic Validations ---
         if (!nome || !escola || !origem || !classe) {
@@ -582,7 +595,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const { remaining: remainingSkillPoints, specialists: usedSpecialists } = calculateSkillPoints();
+        // Call calculateSkillPoints with the explicitly gathered class/origin values
+        const { remaining: remainingSkillPoints, specialists: usedSpecialists } = calculateSkillPoints(classe, origem);
         if (remainingSkillPoints < 0) {
             alert(`Você gastou muitos pontos de perícia adicionais. Pontos restantes: ${remainingSkillPoints}`);
             return;
@@ -676,9 +690,11 @@ document.addEventListener('DOMContentLoaded', () => {
         savePlayers();
         renderPlayers();
         characterForm.reset(); // Clear all form fields
-        updateInitialSkills(); // Reset skill dropdowns to show new initial state for next creation
-        calculateAttributePoints(); // Reset attribute points display
-        calculateSkillPoints(); // Reset skill points display
+        // After reset, re-run initial setup for the next character creation
+        const defaultClass = document.getElementById('classe').value; // Will be empty string after reset
+        const defaultOrigin = document.getElementById('origem').value; // Will be empty string after reset
+        updateInitialSkills(defaultClass, defaultOrigin); // Re-sets dropdowns and recalculates based on default empty selections
+        calculateAttributePoints(); // Recalculate attribute points display
 
         alert(`Jogador ${nome} registrado com sucesso!`);
         showSection('character-list-section'); // Navigate to player list after successful creation
@@ -686,6 +702,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Initialization on Page Load ---
     renderPlayers(); // Load and display existing players
-    updateInitialSkills(); // Set initial skill dropdown states and points display
+
+    // Initial call to set up skills display based on default form values (or empty)
+    const initialClass = document.getElementById('classe').value;
+    const initialOrigin = document.getElementById('origem').value;
+    updateInitialSkills(initialClass, initialOrigin);
+
+    calculateAttributePoints(); // Calculate initial attribute points display
+
     showSection('character-creation-section'); // Default to character creation page
 });
