@@ -12,7 +12,6 @@ const allAbilities = [
     { id: 'contrarioFurioso', name: 'Contrário Furioso', cost: 2, type: 'Estilo: Oposto', description: 'Uma vez por partida, quando seu time estiver em desvantagem no placar por 3 ou mais pontos, você pode gastar 2 PE para adicionar +3 ao seu próximo teste de ataque ou bloqueio. Sua raiva e determinação se transformam em força bruta no momento decisivo.' },
 
     // === ESTILOS DE JOGO (Talentos Aprimorados) ===
-    // Novas categorias de estilos com focos específicos.
 
     // 1. Estilo do Vento (Foco: Velocidade e Agilidade Extrema - AGI)
     { id: 'corteRapido', name: 'Corte Rápido', cost: 1, type: 'Estilo do Vento', description: 'Após um levantamento, mova-se até 6m antes de atacar, ignorando o terreno difícil. Seus movimentos se tornam tão leves e fluidos que parecem deslizar pelo ar.' },
@@ -50,35 +49,30 @@ const allAbilities = [
     { id: 'sombraPersistente', name: 'Sombra Persistente', cost: 1, type: 'Estilo da Sombra', description: 'Uma vez por rodada, quando um ataque adversário seria bem-sucedido, você pode gastar 1 PE para se reposicionar rapidamente (3m) e tentar uma defesa novamente com -2 na CD. Você é uma presença incansável, sempre buscando outra chance.' },
     { id: 'recuperacaoRapida', name: 'Recuperação Rápida', cost: 3, type: 'Estilo da Sombra', description: 'Uma vez por set, gaste 3 PE. Você recupera 1d6+VIG PV. Sua capacidade de recuperação é notável, permitindo que você se mantenha no auge mesmo após grandes esforços.' },
 
-    // === NOVOS ESTILOS DE JOGO ===
-
     // 7. Estilo do Ataque Implacável (Foco: Ofensiva Pura - FOR, AGI)
-    // Para jogadores que vivem para o ataque, com foco em força e técnica ofensiva.
-    { id: 'marteloTerrano', name: 'Martelo Terrano', cost: 2, type: 'Estilo do Ataque Implacável', description: 'Ao realizar um ataque, gaste 2 PE. Seu ataque causa +1 de "Dano" e ignora 1 ponto de bloqueio adversário. A força do seu golpe é tão concentrada que rompe defesas.' },
+    // Note: Reutilizei o ID 'marteloTerrano' aqui, mas ele agora está sob uma nova categoria 'Estilo do Ataque Implacável'.
+    // Se a intenção é que 'Martelo Terrano' seja exclusivo de uma única Aura/Estilo, o ID precisaria ser único
+    // ou haver um mapeamento mais sofisticado. Para simplicidade, assumi que habilidades podem aparecer em mais de um estilo temático.
+    { id: 'ataqueMarteloTerrano', name: 'Martelo Terrano', cost: 2, type: 'Estilo do Ataque Implacável', description: 'Ao realizar um ataque, gaste 2 PE. Seu ataque causa +1 de "Dano" e ignora 1 ponto de bloqueio adversário. A força do seu golpe é tão concentrada que rompe defesas.' },
     { id: 'corteCruzadoPerfeito', name: 'Corte Cruzado Perfeito', cost: 2, type: 'Estilo do Ataque Implacável', description: 'Ao realizar um ataque, gaste 2 PE. Você executa um corte cruzado com precisão inigualável, tornando o teste de defesa do oponente (AGI + Defesa) 3 pontos mais difícil.' },
     { id: 'saquePoderosoVariado', name: 'Saque Poderoso Variado', cost: 3, type: 'Estilo do Ataque Implacável', description: 'Ao realizar um saque viagem, gaste 3 PE. Você pode escolher entre forçar o adversário a um teste de Fortitude CD 15 (para atordoar por 1 rodada) ou um teste de Defesa CD 17 (para forçar um erro).' },
-    { id: 'explosaoVertical', name: 'Explosão Vertical', cost: 2, type: 'Estilo do Ataque Implacável', description: 'Uma vez por rodada, ao saltar para um ataque ou bloqueio, gaste 2 PE. Você ganha +1m na sua altura de salto efetiva para aquele movimento, permitindo que atinja bolas mais altas ou sobreponha bloqueios.' },
+    { id: 'explosaoVertical', name: 'Explosao Vertical', cost: 2, type: 'Estilo do Ataque Implacável', description: 'Uma vez por rodada, ao saltar para um ataque ou bloqueio, gaste 2 PE. Você ganha +1m na sua altura de salto efetiva para aquele movimento, permitindo que atinja bolas mais altas ou sobreponha bloqueios.' },
 
     // 8. Estilo do Guardião da Rede (Foco: Defesa da Rede e Cobertura - FOR, PER)
-    // Para bloqueadores e defensores que protegem a rede com maestria.
     { id: 'leituraDeSpike', name: 'Leitura de Spike', cost: 1, type: 'Estilo do Guardião da Rede', description: 'Ao tentar um bloqueio, gaste 1 PE. Você recebe +2 em seu teste de Bloqueio se o ataque for de um spiker que você já enfrentou no mesmo set. Sua memória visual e tática permitem antecipar a ação.' },
     { id: 'muralhaDeslizante', name: 'Muralha Deslizante', cost: 2, type: 'Estilo do Guardião da Rede', description: 'Uma vez por set, gaste 2 PE. Ao bloquear, você pode se deslocar 3m lateralmente na rede antes de saltar, pegando o atacante de surpresa e ganhando +3 na CD do bloqueio.' },
     { id: 'coberturaPerfeita', name: 'Cobertura Perfeita', cost: 1, type: 'Estilo do Guardião da Rede', description: 'Quando uma bola rebatida do bloqueio cair perto de você (até 3m), gaste 1 PE. Você pode fazer um teste de Defesa (AGI + Reflexos) CD 12 para salvá-la automaticamente, mesmo que fosse impossível para outros.' },
     { id: 'bloqueioUmContraTodos', name: 'Bloqueio Um Contra Todos', cost: 3, type: 'Estilo do Guardião da Rede', description: 'Uma vez por set, gaste 3 PE para realizar um bloqueio sozinho contra um ataque duplo ou triplo. Se bem-sucedido, o atacante sofre -2 em seu próximo teste de ataque por intimidação. Você é a última linha de defesa inquebrável.' },
 
     // 9. Estilo do Orquestrador (Foco: Coordenação e Controle de Equipe - INT, PRE)
-    // Para levantadores e líderes que ditam o ritmo do jogo.
     { id: 'sincroniaPerfeita', name: 'Sincronia Perfeita', cost: 2, type: 'Estilo do Orquestrador', description: 'Ao realizar um levantamento, gaste 2 PE. O atacante que receber seu levantamento pode adicionar +1 em seu teste de ataque e um aliado pode realizar uma ação de movimento extra para se posicionar melhor.' },
     { id: 'ritmoImprevisivel', name: 'Ritmo Imprevisível', cost: 2, type: 'Estilo do Orquestrador', description: 'Ao levantar, gaste 2 PE. Você pode variar drasticamente o ritmo do ataque (muito rápido ou muito lento). Os bloqueadores adversários sofrem -2 em seu teste de Bloqueio para reagir ao ritmo inesperado.' },
     { id: 'chamadoEstrategico', name: 'Chamado Estratégico', cost: 1, type: 'Estilo do Orquestrador', description: 'Como Ação Livre, gaste 1 PE. Você pode dar uma instrução clara a um aliado (Ex: "Vá para a paralela!", "Foco na defesa!"). Se o aliado seguir, ele ganha +1 em seu próximo teste de perícia relevante.' },
     { id: 'maestroDaQuadra', name: 'Maestro da Quadra', cost: 3, type: 'Estilo do Orquestrador', description: 'Uma vez por set, gaste 3 PE. Você coordena um ataque combinado complexo. Se bem-sucedido, o ataque é considerado um "ataque sincronizado", causando +2 de "Dano" e ignorando a primeira camada de defesa adversária.' },
 
     // 10. Estilo do Defensor Imbatível (Foco: Recepção e Agilidade Defensiva - AGI, VIG)
-    // Para líberos e jogadores de fundo que salvam todas as bolas.
     { id: 'rolamentoAereo', name: 'Rolamento Aéreo', cost: 2, type: 'Estilo do Defensor Imbatível', description: 'Ao fazer uma defesa difícil (CD 15+), gaste 2 PE. Em caso de sucesso, você se recupera imediatamente e pode realizar uma ação de movimento extra para cobrir outra área da quadra ou retornar à posição ideal.' },
     { id: 'instintoDeCobertura', name: 'Instinto de Cobertura', cost: 1, type: 'Estilo do Defensor Imbatível', description: 'Uma vez por rodada, se um aliado estiver prestes a falhar em uma defesa dentro do seu alcance (até 6m), gaste 1 PE. Você pode tentar a defesa no lugar dele com um bônus de +2. Sua velocidade te coloca onde a bola precisa estar.' },
     { id: 'defesaEmPontoCego', name: 'Defesa em Ponto Cego', cost: 2, type: 'Estilo do Defensor Imbatível', description: 'Ao ser atingido por um "spike" inesperado ou com visão obstruída, gaste 2 PE. Você pode fazer o teste de Defesa com Vantagem. Sua percepção se aguça, permitindo que você reaja a ameaças invisíveis.' },
     { id: 'resistenciaAoImpacto', name: 'Resistencia ao Impacto', cost: 1, type: 'Estilo do Defensor Imbatível', description: 'Quando você é alvo de um ataque que causa "Dano", gaste 1 PE. Você pode ignorar 1 ponto de "Dano" ou reduzir a dificuldade de um teste de Fortitude para resistir a uma condição causada pelo ataque em 2 pontos.' }
-
-    // Novas habilidades podem ser adicionadas aos estilos existentes ou novos estilos podem ser criados.
 ];
