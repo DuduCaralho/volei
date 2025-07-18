@@ -1,36 +1,84 @@
 // habilidades.js
 
-// Lista completa de habilidades com detalhes, incluindo habilidades de classe.
+// Lista completa de habilidades com detalhes.
+// Reinterpretadas como manifestações de instinto e talento aprimorado, não paranormal.
 const allAbilities = [
-    // Habilidades de Classe (IDs para referência)
-    { id: 'ataqueExplosivo', name: 'Ataque Explosivo', cost: 1, type: 'Classe: Atacante', description: 'Uma vez por rodada, ao realizar um ataque, você pode gastar 1 Ponto de Esforço (PE) para adicionar +2 ao seu teste de ataque.' },
-    { id: 'bloqueioDeFerro', name: 'Bloqueio de Ferro', cost: 1, type: 'Classe: Central', description: 'Uma vez por rodada, ao realizar um bloqueio bem-sucedido, você pode gastar 1 PE para reduzir o dano do ataque adversário em 2.' },
-    { id: 'visaoDeAguia', name: 'Visão de Águia', cost: 1, type: 'Classe: Levantador', description: 'Uma vez por rodada, antes de realizar um levantamento, você pode gastar 1 PE para obter uma informação detalhada sobre a defesa adversária (Ex: "O bloqueador central está fora de posição").' },
-    { id: 'defesaImpecavel', name: 'Defesa Impecável', cost: 1, type: 'Classe: Líbero', description: 'Uma vez por rodada, quando um ataque adversário seria um ponto, você pode gastar 1 PE para rolar um teste de Defesa (AGI + Reflexos) CD 15. Em caso de sucesso, você consegue salvar a bola.' },
-    { id: 'contrarioFurioso', name: 'Contrário Furioso', cost: 2, type: 'Classe: Oposto', description: 'Uma vez por partida, quando seu time estiver em desvantagem no placar por 3 ou mais pontos, você pode gastar 2 PE para adicionar +3 ao seu próximo teste de ataque ou bloqueio.' },
+    // === ESTILOS DE POSIÇÃO (Habilidades de Classe) ===
+    // Estas são habilidades fundamentais ligadas à posição, que o jogador "desperta" naturalmente ao dominar a função.
+    { id: 'ataqueExplosivo', name: 'Ataque Explosivo', cost: 1, type: 'Estilo: Atacante', description: 'Uma vez por rodada, ao realizar um ataque, você pode gastar 1 Ponto de Esforço (PE) para adicionar +2 ao seu teste de ataque. É um impulso de adrenalina focado na força de impacto.' },
+    { id: 'bloqueioDeFerro', name: 'Bloqueio de Ferro', cost: 1, type: 'Estilo: Central', description: 'Uma vez por rodada, ao realizar um bloqueio bem-sucedido, você pode gastar 1 PE para reduzir o dano do ataque adversário em 2. Seu posicionamento se torna incrivelmente sólido, quase impenetrável.' },
+    { id: 'visaoDeAguia', name: 'Visão de Águia', cost: 1, type: 'Estilo: Levantador', description: 'Uma vez por rodada, antes de realizar um levantamento, você pode gastar 1 PE para obter uma informação detalhada sobre a defesa adversária. É um pico de concentração que revela aberturas claras.' },
+    { id: 'defesaImpecavel', name: 'Defesa Impecável', cost: 1, type: 'Estilo: Líbero', description: 'Uma vez por rodada, quando um ataque adversário seria um ponto, você pode gastar 1 PE para rolar um teste de Defesa (AGI + Reflexos) CD 15. Em caso de sucesso, você consegue salvar a bola com um instinto puro de cobertura.' },
+    { id: 'contrarioFurioso', name: 'Contrário Furioso', cost: 2, type: 'Estilo: Oposto', description: 'Uma vez por partida, quando seu time estiver em desvantagem no placar por 3 ou mais pontos, você pode gastar 2 PE para adicionar +3 ao seu próximo teste de ataque ou bloqueio. Sua raiva e determinação se transformam em força bruta no momento decisivo.' },
 
-    // Aura de Vento (AGI)
-    { id: 'corteRapido', name: 'Corte Rápido', cost: 1, type: 'Aura de Vento', description: 'Após levantamento, mova-se até 6m antes de atacar, ignorando terreno difícil.' },
-    { id: 'defesaDeslizante', name: 'Defesa Deslizante', cost: 1, type: 'Aura de Vento', description: 'Ao fazer um teste de defesa, pode gastar 1 PE para rolar novamente um dado que resultou em 1.' },
-    { id: 'saqueVentania', name: 'Saque Ventania', cost: 2, type: 'Aura de Vento', description: 'Seu saque cria uma leve perturbação no ar. O receptor adversário sofre -2 em seu teste de recepção.' },
-    // Aura de Terra (FOR)
-    { id: 'marteloTerrano', name: 'Martelo Terrano', cost: 2, type: 'Aura de Terra', description: 'Ao realizar um ataque, gaste 2 PE. Seu ataque causa +1 de "Dano" e ignora 1 ponto de bloqueio adversário.' },
-    { id: 'muroInabalavel', name: 'Muro Inabalável', cost: 1, type: 'Aura de Terra', description: 'Ao bloquear, gaste 1 PE. Adicione +2 à sua CD de Bloqueio neste turno.' },
-    { id: 'impactoNoChao', name: 'Impacto no Chão', cost: 1, type: 'Aura de Terra', description: 'Ao cair de um salto, você pode gastar 1 PE para criar uma pequena onda de choque. Oponentes adjacentes (até 3m) devem fazer um teste de AGI (CD 10) ou ficam desprevenidos por uma rodada.' },
-    // Aura de Água (INT)
-    { id: 'fluxoTatico', name: 'Fluxo Tático', cost: 1, type: 'Aura de Água', description: 'Após observar um movimento adversário, gaste 1 PE. Na próxima rodada, um aliado recebe +2 em um teste de Perícia de Tática ou Defesa.' },
-    { id: 'toqueSubtil', name: 'Toque Sutil', cost: 1, type: 'Aura de Água', description: 'Ao realizar um levantamento, gaste 1 PE. O atacante que receber seu levantamento pode escolher qual dos bloqueadores adversários ele quer focar.' },
-    { id: 'ondasDePressao', name: 'Ondas de Pressão', cost: 2, type: 'Aura de Água', description: 'Gaste 2 PE para forçar um oponente a fazer um teste de Vontade (PRE ou INT) CD 12. Em caso de falha, ele perde 1 Ponto de Esforço no próximo turno devido à pressão.' },
-    // Aura de Fogo (PRE)
-    { id: 'gritoIncendiario', name: 'Grito Incendiário', cost: 1, type: 'Aura de Fogo', description: 'Gaste 1 PE. Inspire um aliado adjacente. Ele ganha +1 em um teste de Atributo ou Perícia até o final da rodada.' },
-    { id: 'auraDeCombate', name: 'Aura de Combate', cost: 2, type: 'Aura de Fogo', description: 'Pelo custo de 2 PE por rodada, enquanto ativa, você e aliados adjacentes (3m) ganham +1 em testes de Ataque.' },
-    { id: 'espiritoInquebravel', name: 'Espírito Inquebrável', cost: 1, type: 'Aura de Fogo', description: 'Quando seus PV caem abaixo de 5, gaste 1 PE. Você recupera 3 PV e pode fazer uma ação extra de movimento neste turno.' },
-    // Aura de Luz (PER)
-    { id: 'olhosPrevisores', name: 'Olhos Previsores', cost: 2, type: 'Aura de Luz', description: 'Gaste 2 PE. No início da rodada, você pode perguntar ao Mestre uma informação sobre a próxima ação de um adversário (Ex: "Quem vai atacar?", "Para onde a bola vai?").' },
-    { id: 'recepcaoIluminada', name: 'Recepção Iluminada', cost: 1, type: 'Aura de Luz', description: 'Gaste 1 PE. Quando você ou um aliado adjacente fizer um teste de Recepção/Defesa, você pode adicionar +3 ao resultado.' },
-    { id: 'caminhoBrilhante', name: 'Caminho Brilhante', cost: 1, type: 'Aura de Luz', description: 'Gaste 1 PE. Ao levantar a bola, você pode dar uma sugestão de "melhor ataque" (Ex: "vá para a paralela") para o atacante. Se ele seguir, ganha +2 no teste de Ataque.' },
-    // Aura de Escuridão (VIG)
-    { id: 'resilienciaInabalavel', name: 'Resiliência Inabalável', cost: 1, type: 'Aura de Escuridão', description: 'Gaste 1 PE. Se você for atingido por um ataque que causa "Dano" ou condição (Atordoados, Cansado), você pode reduzir o efeito em 1 nível (ex: Atordoado se torna Cansado, Cansado se torna nada).' },
-    { id: 'absorcaoDeImpacto', name: 'Absorção de Impacto', cost: 2, type: 'Aura de Escuridão', description: 'Gaste 2 PE para converter o "Dano" que você receberia em PE. Cada 2 pontos de Dano se tornam 1 PE (você ainda sofre o dano normal).' },
-    { id: 'sombraPersistente', name: 'Sombra Persistente', cost: 1, type: 'Aura de Escuridão', description: 'Uma vez por rodada, quando um ataque adversário seria bem-sucedido, você pode gastar 1 PE para se reposicionar rapidamente (3m) e tentar uma defesa novamente com -2 na CD.' }
+    // === ESTILOS DE JOGO (Talentos Aprimorados) ===
+    // Novas categorias de estilos com focos específicos.
+
+    // 1. Estilo do Vento (Foco: Velocidade e Agilidade Extrema - AGI)
+    { id: 'corteRapido', name: 'Corte Rápido', cost: 1, type: 'Estilo do Vento', description: 'Após um levantamento, mova-se até 6m antes de atacar, ignorando o terreno difícil. Seus movimentos se tornam tão leves e fluidos que parecem deslizar pelo ar.' },
+    { id: 'defesaDeslizante', name: 'Defesa Deslizante', cost: 1, type: 'Estilo do Vento', description: 'Ao fazer um teste de defesa, você pode gastar 1 PE para rolar novamente um dado que resultou em 1. Sua agilidade permite uma segunda tentativa quase instantânea, caindo e levantando em um flash.' },
+    { id: 'saqueVentania', name: 'Saque Ventania', cost: 2, type: 'Estilo do Vento', description: 'Seu saque cria uma leve perturbação no ar que desestabiliza a recepção. O receptor adversário sofre -2 em seu teste de recepção devido à dificuldade de prever a trajetória pela velocidade incomum.' },
+    { id: 'passoFantasma', name: 'Passo Fantasma', cost: 2, type: 'Estilo do Vento', description: 'Uma vez por rodada, gaste 2 PE para se mover até o dobro do seu deslocamento normal sem provocar ataques de oportunidade ou ser detectado visualmente por um turno se estiver em quadra aberta.' },
+
+    // 2. Estilo da Muralha (Foco: Bloqueio e Defesa Sólida - FOR)
+    { id: 'muroInabalavel', name: 'Muro Inabalável', cost: 1, type: 'Estilo da Muralha', description: 'Ao bloquear, gaste 1 PE. Adicione +2 à sua CD de Bloqueio neste turno. Sua postura se solidifica, transformando-o em uma barreira quase impossível de transpor.' },
+    { id: 'impactoNoChao', name: 'Impacto no Chão', cost: 1, type: 'Estilo da Muralha', description: 'Ao cair de um salto (após ataque ou bloqueio), você pode gastar 1 PE para criar uma pequena onda de choque. Oponentes adjacentes (até 3m) devem fazer um teste de AGI (CD 10) ou ficam desprevenidos por uma rodada devido ao impacto físico.' },
+    { id: 'pressaoConstante', name: 'Pressão Constante', cost: 2, type: 'Estilo da Muralha', description: 'Uma vez por set, ao realizar um bloqueio, você pode gastar 2 PE para que os atacantes adversários na área sofram -1 em seus testes de ataque na próxima rodada, intimidados por sua presença maciça na rede.' },
+    { id: 'bloqueioColetivoInstintivo', name: 'Bloqueio Coletivo Instintivo', cost: 3, type: 'Estilo da Muralha', description: 'Ao participar de um bloqueio duplo ou triplo, gaste 3 PE. Se o bloqueio for bem-sucedido, a bola é repelida para a quadra adversária com tal força que conta como um "spike" (ataque) para o cálculo de dano/reação.' },
+
+    // 3. Estilo do Fluxo (Foco: Tática e Adaptação em Quadra - INT)
+    { id: 'fluxoTatico', name: 'Fluxo Tático', cost: 1, type: 'Estilo do Fluxo', description: 'Após observar um movimento adversário, gaste 1 PE. Na próxima rodada, um aliado recebe +2 em um teste de Perícia de Tática ou Defesa. Sua mente flui com o jogo, encontrando a melhor resposta para a equipe.' },
+    { id: 'toqueSubtil', name: 'Toque Sutil', cost: 1, type: 'Estilo do Fluxo', description: 'Ao realizar um levantamento, gaste 1 PE. O atacante que receber seu levantamento pode escolher qual dos bloqueadores adversários ele quer focar. Sua precisão desorienta a defesa, criando aberturas inesperadas.' },
+    { id: 'ondasDePressao', name: 'Ondas de Pressão', cost: 2, type: 'Estilo do Fluxo', description: 'Gaste 2 PE para forçar um oponente a fazer um teste de Vontade (PRE ou INT) CD 12. Em caso de falha, ele perde 1 Ponto de Esforço no próximo turno. Sua inteligência de jogo sobrecarrega mentalmente os adversários.' },
+    { id: 'leituraProfunda', name: 'Leitura Profunda', cost: 3, type: 'Estilo do Fluxo', description: 'Uma vez por set, gaste 3 PE. Na próxima jogada do adversário, o Mestre deve revelar uma fraqueza específica na formação ou estratégia deles, que você pode explorar.' },
+
+    // 4. Estilo da Faísca (Foco: Liderança e Explosão Emocional - PRE)
+    { id: 'gritoIncendiario', name: 'Grito Incendiário', cost: 1, type: 'Estilo da Faísca', description: 'Gaste 1 PE. Inspire um aliado adjacente. Ele ganha +1 em um teste de Atributo ou Perícia até o final da rodada. Sua voz acende a chama da motivação nos companheiros, elevando seu desempenho.' },
+    { id: 'auraDeCombate', name: 'Aura de Combate', cost: 2, type: 'Estilo da Faísca', description: 'Pelo custo de 2 PE por rodada, enquanto ativa, você e aliados adjacentes (3m) ganham +1 em testes de Ataque. Sua paixão irradia, elevando o espírito de luta da equipe ao seu redor.' },
+    { id: 'espiritoInquebravel', name: 'Espírito Inquebrável', cost: 1, type: 'Estilo da Faísca', description: 'Quando seus PV caem abaixo de 50%, gaste 1 PE. Você recupera 3 PV e pode fazer uma ação extra de movimento neste turno. Sua determinação se recusa a ceder, impulsionando-o além dos limites da dor.' },
+    { id: 'desafioInspirador', name: 'Desafio Inspirador', cost: 3, type: 'Estilo da Faísca', description: 'Após um erro grave do seu time ou quando o placar está desfavorável, gaste 3 PE. Todo o seu time (ou 3 aliados à escolha) recebe Vantagem no próximo teste de perícia ofensiva ou defensiva. Sua paixão é contagiante.' },
+
+    // 5. Estilo da Visão (Foco: Antecipação e Precisão - PER)
+    { id: 'olhosPrevisores', name: 'Olhos Previsores', cost: 2, type: 'Estilo da Visão', description: 'Gaste 2 PE. No início da rodada, você pode perguntar ao Mestre uma informação sobre a próxima ação de um adversário (Ex: "Quem vai atacar?", "Para onde a bola vai?"). Sua percepção aguda antecipa os lances antes que aconteçam.' },
+    { id: 'recepcaoIluminada', name: 'Recepção Iluminada', cost: 1, type: 'Estilo da Visão', description: 'Gaste 1 PE. Quando você ou um aliado adjacente fizer um teste de Recepção/Defesa, você pode adicionar +3 ao resultado. Sua visão clara permite prever a trajetória da bola com precisão incomum.' },
+    { id: 'caminhoBrilhante', name: 'Caminho Brilhante', cost: 1, type: 'Estilo da Visão', description: 'Gaste 1 PE. Ao levantar a bola, você pode dar uma sugestão de "melhor ataque" (Ex: "vá para a paralela") para o atacante. Se ele seguir, ganha +2 no teste de Ataque. Sua leitura do jogo revela o caminho ideal para o ponto.' },
+    { id: 'pontoFraco', name: 'Ponto Fraco', cost: 2, type: 'Estilo da Visão', description: 'Uma vez por rodada, ao realizar um ataque, gaste 2 PE. Você identifica e mira um ponto fraco na defesa adversária (Ex: "no pé do líbero", "entre os bloqueadores"), tornando a CD da defesa ou bloqueio adversário 2 pontos mais difícil.' },
+
+    // 6. Estilo da Sombra (Foco: Resiliência e Persistência - VIG)
+    { id: 'resilienciaInabalavel', name: 'Resiliencia Inabalável', cost: 1, type: 'Estilo da Sombra', description: 'Gaste 1 PE. Se você for atingido por um ataque que causa "Dano" ou condição (Atordoado, Cansado), você pode reduzir o efeito em 1 nível. Seu corpo e mente se adaptam para suportar os impactos mais duros.' },
+    { id: 'absorcaoDeImpacto', name: 'Absorção de Impacto', cost: 2, type: 'Estilo da Sombra', description: 'Gaste 2 PE para converter o "Dano" que você receberia em PE. Cada 2 pontos de Dano se tornam 1 PE (você ainda sofre o dano normal). Seu corpo desvia a energia do impacto, reabastecendo sua força interior.' },
+    { id: 'sombraPersistente', name: 'Sombra Persistente', cost: 1, type: 'Estilo da Sombra', description: 'Uma vez por rodada, quando um ataque adversário seria bem-sucedido, você pode gastar 1 PE para se reposicionar rapidamente (3m) e tentar uma defesa novamente com -2 na CD. Você é uma presença incansável, sempre buscando outra chance.' },
+    { id: 'recuperacaoRapida', name: 'Recuperação Rápida', cost: 3, type: 'Estilo da Sombra', description: 'Uma vez por set, gaste 3 PE. Você recupera 1d6+VIG PV. Sua capacidade de recuperação é notável, permitindo que você se mantenha no auge mesmo após grandes esforços.' },
+
+    // === NOVOS ESTILOS DE JOGO ===
+
+    // 7. Estilo do Ataque Implacável (Foco: Ofensiva Pura - FOR, AGI)
+    // Para jogadores que vivem para o ataque, com foco em força e técnica ofensiva.
+    { id: 'marteloTerrano', name: 'Martelo Terrano', cost: 2, type: 'Estilo do Ataque Implacável', description: 'Ao realizar um ataque, gaste 2 PE. Seu ataque causa +1 de "Dano" e ignora 1 ponto de bloqueio adversário. A força do seu golpe é tão concentrada que rompe defesas.' },
+    { id: 'corteCruzadoPerfeito', name: 'Corte Cruzado Perfeito', cost: 2, type: 'Estilo do Ataque Implacável', description: 'Ao realizar um ataque, gaste 2 PE. Você executa um corte cruzado com precisão inigualável, tornando o teste de defesa do oponente (AGI + Defesa) 3 pontos mais difícil.' },
+    { id: 'saquePoderosoVariado', name: 'Saque Poderoso Variado', cost: 3, type: 'Estilo do Ataque Implacável', description: 'Ao realizar um saque viagem, gaste 3 PE. Você pode escolher entre forçar o adversário a um teste de Fortitude CD 15 (para atordoar por 1 rodada) ou um teste de Defesa CD 17 (para forçar um erro).' },
+    { id: 'explosaoVertical', name: 'Explosão Vertical', cost: 2, type: 'Estilo do Ataque Implacável', description: 'Uma vez por rodada, ao saltar para um ataque ou bloqueio, gaste 2 PE. Você ganha +1m na sua altura de salto efetiva para aquele movimento, permitindo que atinja bolas mais altas ou sobreponha bloqueios.' },
+
+    // 8. Estilo do Guardião da Rede (Foco: Defesa da Rede e Cobertura - FOR, PER)
+    // Para bloqueadores e defensores que protegem a rede com maestria.
+    { id: 'leituraDeSpike', name: 'Leitura de Spike', cost: 1, type: 'Estilo do Guardião da Rede', description: 'Ao tentar um bloqueio, gaste 1 PE. Você recebe +2 em seu teste de Bloqueio se o ataque for de um spiker que você já enfrentou no mesmo set. Sua memória visual e tática permitem antecipar a ação.' },
+    { id: 'muralhaDeslizante', name: 'Muralha Deslizante', cost: 2, type: 'Estilo do Guardião da Rede', description: 'Uma vez por set, gaste 2 PE. Ao bloquear, você pode se deslocar 3m lateralmente na rede antes de saltar, pegando o atacante de surpresa e ganhando +3 na CD do bloqueio.' },
+    { id: 'coberturaPerfeita', name: 'Cobertura Perfeita', cost: 1, type: 'Estilo do Guardião da Rede', description: 'Quando uma bola rebatida do bloqueio cair perto de você (até 3m), gaste 1 PE. Você pode fazer um teste de Defesa (AGI + Reflexos) CD 12 para salvá-la automaticamente, mesmo que fosse impossível para outros.' },
+    { id: 'bloqueioUmContraTodos', name: 'Bloqueio Um Contra Todos', cost: 3, type: 'Estilo do Guardião da Rede', description: 'Uma vez por set, gaste 3 PE para realizar um bloqueio sozinho contra um ataque duplo ou triplo. Se bem-sucedido, o atacante sofre -2 em seu próximo teste de ataque por intimidação. Você é a última linha de defesa inquebrável.' },
+
+    // 9. Estilo do Orquestrador (Foco: Coordenação e Controle de Equipe - INT, PRE)
+    // Para levantadores e líderes que ditam o ritmo do jogo.
+    { id: 'sincroniaPerfeita', name: 'Sincronia Perfeita', cost: 2, type: 'Estilo do Orquestrador', description: 'Ao realizar um levantamento, gaste 2 PE. O atacante que receber seu levantamento pode adicionar +1 em seu teste de ataque e um aliado pode realizar uma ação de movimento extra para se posicionar melhor.' },
+    { id: 'ritmoImprevisivel', name: 'Ritmo Imprevisível', cost: 2, type: 'Estilo do Orquestrador', description: 'Ao levantar, gaste 2 PE. Você pode variar drasticamente o ritmo do ataque (muito rápido ou muito lento). Os bloqueadores adversários sofrem -2 em seu teste de Bloqueio para reagir ao ritmo inesperado.' },
+    { id: 'chamadoEstrategico', name: 'Chamado Estratégico', cost: 1, type: 'Estilo do Orquestrador', description: 'Como Ação Livre, gaste 1 PE. Você pode dar uma instrução clara a um aliado (Ex: "Vá para a paralela!", "Foco na defesa!"). Se o aliado seguir, ele ganha +1 em seu próximo teste de perícia relevante.' },
+    { id: 'maestroDaQuadra', name: 'Maestro da Quadra', cost: 3, type: 'Estilo do Orquestrador', description: 'Uma vez por set, gaste 3 PE. Você coordena um ataque combinado complexo. Se bem-sucedido, o ataque é considerado um "ataque sincronizado", causando +2 de "Dano" e ignorando a primeira camada de defesa adversária.' },
+
+    // 10. Estilo do Defensor Imbatível (Foco: Recepção e Agilidade Defensiva - AGI, VIG)
+    // Para líberos e jogadores de fundo que salvam todas as bolas.
+    { id: 'rolamentoAereo', name: 'Rolamento Aéreo', cost: 2, type: 'Estilo do Defensor Imbatível', description: 'Ao fazer uma defesa difícil (CD 15+), gaste 2 PE. Em caso de sucesso, você se recupera imediatamente e pode realizar uma ação de movimento extra para cobrir outra área da quadra ou retornar à posição ideal.' },
+    { id: 'instintoDeCobertura', name: 'Instinto de Cobertura', cost: 1, type: 'Estilo do Defensor Imbatível', description: 'Uma vez por rodada, se um aliado estiver prestes a falhar em uma defesa dentro do seu alcance (até 6m), gaste 1 PE. Você pode tentar a defesa no lugar dele com um bônus de +2. Sua velocidade te coloca onde a bola precisa estar.' },
+    { id: 'defesaEmPontoCego', name: 'Defesa em Ponto Cego', cost: 2, type: 'Estilo do Defensor Imbatível', description: 'Ao ser atingido por um "spike" inesperado ou com visão obstruída, gaste 2 PE. Você pode fazer o teste de Defesa com Vantagem. Sua percepção se aguça, permitindo que você reaja a ameaças invisíveis.' },
+    { id: 'resistenciaAoImpacto', name: 'Resistencia ao Impacto', cost: 1, type: 'Estilo do Defensor Imbatível', description: 'Quando você é alvo de um ataque que causa "Dano", gaste 1 PE. Você pode ignorar 1 ponto de "Dano" ou reduzir a dificuldade de um teste de Fortitude para resistir a uma condição causada pelo ataque em 2 pontos.' }
+
+    // Novas habilidades podem ser adicionadas aos estilos existentes ou novos estilos podem ser criados.
 ];
