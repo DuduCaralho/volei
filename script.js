@@ -1,7 +1,7 @@
 // script.js
 
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Elementos de UI ---
+    // --- UI Element References ---
     const navButtons = document.querySelectorAll('.nav-button');
     const pageSections = document.querySelectorAll('.page-section');
     const characterForm = document.getElementById('character-form');
@@ -14,10 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const subNavButtons = document.querySelectorAll('.sub-nav-button');
     const subPageSections = document.querySelectorAll('.sub-page-section');
 
-    // Detalhes do Jogador (seção principal)
+    // Character Details Section Elements
     const currentPlayerNameElem = document.getElementById('current-player-name');
-
-    // Sub-seção Personagem
     const detailNome = document.getElementById('detail-nome');
     const detailEscola = document.getElementById('detail-escola');
     const detailOrigem = document.getElementById('detail-origem');
@@ -30,22 +28,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const detailAtributos = document.getElementById('detail-atributos');
     const btnIncreaseNA = document.getElementById('btn-increase-na');
 
-    // Sub-seção Combate
+    // Combat Sub-section
     const detailPericias = document.getElementById('detail-pericias');
 
-    // Sub-seção Habilidades
+    // Abilities Sub-section
     const detailHabilidades = document.getElementById('detail-habilidades');
     const selectNewAbility = document.getElementById('select-new-ability');
     const addAbilityBtn = document.getElementById('add-ability-btn');
 
-    // Sub-seção Descrição
+    // Description Sub-section
     const detailLore = document.getElementById('detail-lore');
     const detailDescricaoFisica = document.getElementById('detail-descricao-fisica');
     const detailMotivacoes = document.getElementById('detail-motivacoes');
     const detailAnotacoes = document.getElementById('detail-anotacoes');
     const saveDescriptionBtn = document.getElementById('save-description-btn');
 
-
+    // Character Creation Form Inputs
     const attrInputs = {
         forca: document.getElementById('forca'),
         agilidade: document.getElementById('agilidade'),
@@ -66,12 +64,13 @@ document.addEventListener('DOMContentLoaded', () => {
         intimidacao: document.getElementById('intimidacao'),
         lideranca: document.getElementById('lideranca'),
         manobra: document.getElementById('manobra'),
-        percepcaoSkill: document.getElementById('percepcao-skill'), // Renamed to avoid conflict
+        percepcaoSkill: document.getElementById('percepcao-skill'),
         pontaria: document.getElementById('pontaria'),
         reflexos: document.getElementById('reflexos'),
         tatica: document.getElementById('tatica')
     };
 
+    // --- Game Data Definitions ---
     const classePericiasIniciais = {
         'Atacante': ['atletismo', 'intimidacao', 'pontaria'],
         'Central': ['bloqueio', 'tatica', 'percepcaoSkill'],
@@ -86,17 +85,17 @@ document.addEventListener('DOMContentLoaded', () => {
         'Rivalidade': { pericia: 'intimidacao', beneficio: 'Uma vez/partida, +2 em ataques contra rival específico.' },
         'Legado Familiar': { pericia: 'tatica', beneficio: 'Uma vez/partida, gasta 1 PE para dar +2 em perícia de aliado adjacente.' },
         'Azarao': { pericia: 'fortitude', beneficio: 'Uma vez/partida, se PV < 50%, +1 em todos os atributos até o final do set.' },
-        'Acidente': { pericia: 'percepcaoSkill', beneficio: 'Afinidade com Elemento Paranormal e +1 PE na criação.' }
+        'Acidente': { pericia: 'percepcaoSkill', beneficio: 'Afinidade com Estilo e +1 PE na criação.' } // Atualizado "Paranormal" para "Estilo"
     };
 
-    // allAbilities agora vem de habilidades.js
-    // Certifique-se de que habilidades.js é carregado ANTES deste script no HTML.
+    // allAbilities is loaded from habilidades.js
+    // Ensure habilidades.js is linked before script.js in index.html
 
-    // --- Variáveis de Estado Global ---
+    // --- Global State Variables ---
     let players = JSON.parse(localStorage.getItem('haikyuuPlayers')) || [];
     let selectedPlayerId = null;
 
-    // --- Funções de Navegação ---
+    // --- Navigation Functions ---
     function showSection(sectionId) {
         pageSections.forEach(section => {
             section.classList.remove('active');
@@ -106,11 +105,18 @@ document.addEventListener('DOMContentLoaded', () => {
         navButtons.forEach(button => {
             button.classList.remove('active');
         });
-        document.querySelector(`.nav-button[data-section="${sectionId}"]`).classList.add('active');
+        const targetButton = document.querySelector(`.nav-button[data-section="${sectionId}"]`);
+        if (targetButton) {
+            targetButton.classList.add('active');
+        } else if (sectionId === 'character-details-section') {
+            detailsNavButton.classList.add('active'); // Activate details button when showing details
+        }
 
         if (sectionId !== 'character-details-section') {
             detailsNavButton.style.display = 'none';
             selectedPlayerId = null;
+        } else {
+            detailsNavButton.style.display = 'block'; // Ensure it's visible when on details page
         }
     }
 
@@ -126,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector(`.sub-nav-button[data-sub-section="${subSectionId}"]`).classList.add('active');
     }
 
-    // --- Funções de Validação e Cálculo ---
+    // --- Character Creation Calculations and Validations ---
     function calculateAttributePoints() {
         let total = 0;
         for (const key in attrInputs) {
@@ -136,36 +142,29 @@ document.addEventListener('DOMContentLoaded', () => {
         return 10 - total;
     }
 
-    // Corrigindo a lógica de cálculo de pontos de perícia
     function calculateSkillPoints() {
-        let customCost = 0; // Custo dos pontos gastos pelo jogador
-        let specialistsUsed = 0; // Número de especialistas que o jogador escolheu
+        let customCost = 0;
+        let specialistsUsed = 0;
+
+        const selectedClass = document.getElementById('classe').value;
+        const selectedOrigem = document.getElementById('origem').value;
 
         for (const key in skillInputs) {
             const value = parseInt(skillInputs[key].value);
-            // Verifica se a perícia não é uma das perícias iniciais automáticas
-            // As perícias iniciais são "gratuitas" e já vêm como Treinado (valor 5)
-            // Se o jogador mudar uma perícia inicial para Especialista, aí sim consome pontos.
-            // Se o jogador escolher Treinado em uma perícia NÃO inicial, consome 1 ponto.
-
-            const selectedClass = document.getElementById('classe').value;
-            const selectedOrigem = document.getElementById('origem').value;
-
             const isClassInitial = selectedClass && classePericiasIniciais[selectedClass] && classePericiasIniciais[selectedClass].includes(key);
             const isOriginInitial = selectedOrigem && origemPericiaBeneficio[selectedOrigem] && origemPericiaBeneficio[selectedOrigem].pericia === key;
 
-            if (value === 10) { // Se for Especialista
+            if (value === 10) { // Especialista
                 specialistsUsed += 1;
-                if (!isClassInitial && !isOriginInitial) { // Se não for uma perícia inicial (e o jogador a fez Especialista)
+                if (!isClassInitial && !isOriginInitial) { // If not initial, costs full 2 points
                     customCost += 2;
-                } else if (value > 5) { // Se for uma perícia inicial mas o jogador a "upou" para Especialista
-                    customCost += 1; // Custa 1 ponto ADICIONAL para ir de Treinado (gratuito) para Especialista
+                } else if (pericias[key] < 10) { // If was initial (5) and now upgraded to specialist (10)
+                    customCost += 1; // Costs 1 additional point to go from 5 to 10
                 }
-            } else if (value === 5) { // Se for Treinado
-                if (!isClassInitial && !isOriginInitial) { // Se não for uma perícia inicial (e o jogador a treinou)
+            } else if (value === 5) { // Treinado
+                if (!isClassInitial && !isOriginInitial) { // If not initial, costs 1 point
                     customCost += 1;
                 }
-                // Se for uma perícia inicial e estiver Treinada, não custa pontos.
             }
         }
         pontosPericiaRestantesSpan.textContent = 3 - customCost;
@@ -173,9 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return { remaining: 3 - customCost, specialists: specialistsUsed };
     }
 
-    // Atualiza os selects de perícia e recalcula os pontos.
+    // Resets skill dropdowns and applies initial class/origin skills
     function updateInitialSkills() {
-        // Primeiro, redefine todos os selects para 'Não Treinado (0)'
         for (const key in skillInputs) {
             skillInputs[key].value = "0";
         }
@@ -183,31 +181,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedClass = document.getElementById('classe').value;
         const selectedOrigem = document.getElementById('origem').value;
 
-        // Aplica as perícias iniciais da classe como 'Treinado'
         if (selectedClass && classePericiasIniciais[selectedClass]) {
             classePericiasIniciais[selectedClass].forEach(skillId => {
                 const skillElement = skillInputs[skillId];
                 if (skillElement) {
-                    skillElement.value = "5"; // Define como Treinado (bônus +5)
+                    skillElement.value = "5";
                 }
             });
         }
 
-        // Aplica a perícia inicial da origem como 'Treinado'
         if (selectedOrigem && origemPericiaBeneficio[selectedOrigem]) {
             const originSkillId = origemPericiaBeneficio[selectedOrigem].pericia;
             const skillElement = skillInputs[originSkillId];
-            if (skillElement && skillElement.value === "0") { // Não sobrescreve se já foi definido pela classe
-                skillElement.value = "5"; // Define como Treinado (bônus +5)
+            if (skillElement && parseInt(skillElement.value) < 5) { // Only set if not already higher (e.g., from class)
+                skillElement.value = "5";
             }
         }
-
-        // Recalcula os pontos depois de definir as perícias iniciais gratuitas
         calculateSkillPoints();
     }
 
-
-    // --- Gerenciamento de Personagens (Armazenamento Local) ---
+    // --- Player Data Management (LocalStorage) ---
     function savePlayers() {
         localStorage.setItem('haikyuuPlayers', JSON.stringify(players));
     }
@@ -246,7 +239,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     selectedPlayerId = card.dataset.id;
                     displayPlayerDetails(selectedPlayerId);
-                    detailsNavButton.style.display = 'block';
                     showSection('character-details-section');
                     showSubSection('sub-personagem');
                 });
@@ -259,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     players = players.filter(p => p.id !== playerId);
                     savePlayers();
                     renderPlayers();
-                    if (selectedPlayerId === playerId) {
+                    if (selectedPlayerId === playerId) { // If the deleted player was currently displayed
                         showSection('character-list-section');
                     }
                 });
@@ -267,16 +259,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // --- Display Player Details ---
     function displayPlayerDetails(playerId) {
         const player = getPlayerById(playerId);
         if (!player) {
-            alert('Jogador não encontrado!');
+            console.error('Player not found for ID:', playerId);
             showSection('character-list-section');
             return;
         }
 
         currentPlayerNameElem.innerHTML = `<i class="fas fa-user-check"></i> Detalhes do Jogador: ${player.nome}`;
 
+        // Sub-section Personagem
         detailNome.textContent = player.nome;
         detailEscola.textContent = player.escola;
         detailOrigem.textContent = `${player.origem} (${origemPericiaBeneficio[player.origem] ? origemPericiaBeneficio[player.origem].beneficio : 'Nenhum benefício.'})`;
@@ -297,6 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         detailAtributos.innerHTML = attributesHtml;
 
+        // Sub-section Combate (Perícias)
         let skillsHtml = '';
         const skillIcons = {
             acrobacia: '<i class="fas fa-gym"></i>', atletismo: '<i class="fas fa-running"></i>', bloqueio: '<i class="fas fa-shield-alt"></i>',
@@ -316,6 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         detailPericias.innerHTML = skillsHtml || '<p>Nenhuma perícia treinada.</p>';
 
+        // Sub-section Habilidades
         let abilitiesHtml = '';
         if (player.habilidades && player.habilidades.length > 0) {
             player.habilidades.forEach(abilityId => {
@@ -324,50 +320,56 @@ document.addEventListener('DOMContentLoaded', () => {
                     const typeIcon = getTypeIcon(ability.type);
                     abilitiesHtml += `<div class="ability-display-item">${typeIcon} <strong>${ability.name}</strong> (${ability.cost} PE) - <em>${ability.type}</em>: ${ability.description}</div>`;
                 } else {
-                    abilitiesHtml += `<div class="ability-display-item"><strong>${abilityId}</strong>: Habilidade não encontrada (ID: ${abilityId})</div>`;
+                    abilitiesHtml += `<div class="ability-display-item"><strong>${abilityId}</strong>: Estilo/Talento não encontrado (ID: ${abilityId})</div>`;
                 }
             });
         } else {
-            abilitiesHtml = '<p>Nenhuma habilidade paranormal despertada ainda.</p>';
+            abilitiesHtml = '<p>Nenhum estilo de jogo ou talento aprimorado ainda.</p>';
         }
         detailHabilidades.innerHTML = abilitiesHtml;
         populateAbilitySelection(player);
 
+        // Sub-section Descrição
         detailLore.value = player.lore || '';
         detailDescricaoFisica.value = player.descricaoFisica || '';
         detailMotivacoes.value = player.motivacoes || '';
         detailAnotacoes.value = player.anotacoes || '';
     }
 
+    // Helper to get icon for ability type
     function getTypeIcon(type) {
         if (type.includes('Classe')) return '<i class="fas fa-graduation-cap"></i>';
         if (type.includes('Vento')) return '<i class="fas fa-wind"></i>';
-        if (type.includes('Terra')) return '<i class="fas fa-mountain"></i>';
-        if (type.includes('Água')) return '<i class="fas fa-water"></i>';
-        if (type.includes('Fogo')) return '<i class="fas fa-fire-alt"></i>';
-        if (type.includes('Luz')) return '<i class="fas fa-sun"></i>';
-        if (type.includes('Escuridão')) return '<i class="fas fa-moon"></i>';
+        if (type.includes('Muralha')) return '<i class="fas fa-hammer"></i>';
+        if (type.includes('Fluxo')) return '<i class="fas fa-water"></i>';
+        if (type.includes('Faísca')) return '<i class="fas fa-fire-alt"></i>';
+        if (type.includes('Visão')) return '<i class="fas fa-eye"></i>';
+        if (type.includes('Sombra')) return '<i class="fas fa-moon"></i>';
+        if (type.includes('Ataque Implacável')) return '<i class="fas fa-fist-raised"></i>';
+        if (type.includes('Guardião da Rede')) return '<i class="fas fa-shield-alt"></i>';
+        if (type.includes('Orquestrador')) return '<i class="fas fa-chess-king"></i>';
+        if (type.includes('Defensor Imbatível')) return '<i class="fas fa-running"></i>';
         return '<i class="fas fa-question-circle"></i>';
     }
 
-
     function populateAbilitySelection(player) {
-        selectNewAbility.innerHTML = '<option value="">Selecione uma Habilidade</option>';
+        selectNewAbility.innerHTML = '<option value="">Selecione um Estilo/Talento</option>';
         const learnedAbilityIds = player.habilidades.map(id => id);
 
-        // Filtra as habilidades de classe para que não apareçam na seleção de adicionar
-        const abilitiesToSelect = allAbilities.filter(ab => !ab.type.startsWith('Classe'));
+        const abilitiesToSelect = allAbilities.filter(ab =>
+            !ab.type.startsWith('Estilo: ') &&
+            !learnedAbilityIds.includes(ab.id)
+        );
 
         abilitiesToSelect.forEach(ability => {
-            if (!learnedAbilityIds.includes(ability.id)) {
-                const option = document.createElement('option');
-                option.value = ability.id;
-                option.textContent = `${ability.name} (${ability.cost} PE) - ${ability.type}`;
-                selectNewAbility.appendChild(option);
-            }
+            const option = document.createElement('option');
+            option.value = ability.id;
+            option.textContent = `${ability.name} (${ability.cost} PE) - ${ability.type}`;
+            selectNewAbility.appendChild(option);
         });
     }
 
+    // --- NA Increase Logic (with simple modal for choice) ---
     btnIncreaseNA.addEventListener('click', () => {
         const player = getPlayerById(selectedPlayerId);
         if (!player) return;
@@ -375,38 +377,82 @@ document.addEventListener('DOMContentLoaded', () => {
         player.na += 1;
         player.currentPv = player.pv;
         player.currentPe = player.pe;
+        player.pe += 1; // Always gain 1 PE
 
-        alert(`Jogador ${player.nome} alcançou NA ${player.na}! Ganha +1 PE.`);
-        player.pe += 1;
+        let bonusMessage = `Jogador ${player.nome} alcançou NA ${player.na}! Ganha +1 PE.`;
+        let attributeChoice = false;
+        let skillChoice = false;
+
+        if (player.na % 2 === 0) { // Every even NA, get 1 Attr or 1 Skill point
+            bonusMessage += "\nAlém disso, escolha: +1 Ponto em Atributo OU +1 Ponto em Perícia.";
+            // For a simple demo, we'll auto-apply or ask via prompt/confirm
+            const choice = prompt(`${bonusMessage}\nDigite 'atributo' para +1 Atributo ou 'pericia' para +1 Perícia:`);
+            if (choice && choice.toLowerCase() === 'atributo') {
+                const attrToIncrease = prompt('Qual atributo deseja aumentar? (FOR, AGI, VIG, PRE, INT, PER)').toUpperCase();
+                if (player.atributos.hasOwnProperty(attrToIncrease.toLowerCase()) && player.atributos[attrToIncrease.toLowerCase()] < 5) {
+                    player.atributos[attrToIncrease.toLowerCase()] += 1;
+                    player.pv = 10 + player.atributos.vigor; // Recalculate max PV if VIG increases
+                    bonusMessage += `\n${attrToIncrease} aumentado para ${player.atributos[attrToIncrease.toLowerCase()]}.`;
+                } else {
+                    alert('Atributo inválido ou já no máximo. Ponto não aplicado.');
+                }
+            } else if (choice && choice.toLowerCase() === 'pericia') {
+                const skillToIncrease = prompt('Qual perícia deseja Treinar (+5) ou se tornar Especialista (+10)? (Digite o nome completo da perícia, ex: Atletismo)').toLowerCase();
+                const skillId = Object.keys(skillInputs).find(key => key.toLowerCase() === skillToIncrease || (key === 'percepcaoSkill' && skillToIncrease === 'percepção'));
+
+                if (skillId && player.pericias[skillId] < 10) { // Max Specialist +10
+                    if (player.pericias[skillId] === 0) {
+                        player.pericias[skillId] = 5; // Go from Not Trained to Trained
+                        bonusMessage += `\n${skillToIncrease} agora Treinado (+5).`;
+                    } else if (player.pericias[skillId] === 5) {
+                        // Check if player already has an 'Especialista' from custom points
+                        const { specialists: currentSpecialists } = calculateSkillPoints(); // Need to re-calculate from actual data
+                        if (currentSpecialists < 1) { // Allow only one specialist from custom points
+                            player.pericias[skillId] = 10; // Go from Trained to Specialist
+                            bonusMessage += `\n${skillToIncrease} agora Especialista (+10).`;
+                        } else {
+                            alert('Você já tem uma perícia como Especialista. Não é possível ter outra através de pontos de perícia adicionais.');
+                        }
+                    } else if (player.pericias[skillId] === 10) {
+                        alert('Perícia já é Especialista (máximo). Ponto não aplicado.');
+                    }
+                } else {
+                    alert('Perícia inválida ou já no máximo. Ponto não aplicado.');
+                }
+            } else {
+                alert('Escolha inválida. Ponto não aplicado.');
+            }
+        }
 
         savePlayers();
         displayPlayerDetails(selectedPlayerId);
-        alert(`Nível de Ameaça de ${player.nome} aumentado para ${player.na}. PE atual: ${player.pe}.`);
+        alert(bonusMessage);
     });
 
-
+    // --- Ability Addition Logic ---
     addAbilityBtn.addEventListener('click', () => {
         const player = getPlayerById(selectedPlayerId);
         if (!player) return;
 
         const abilityIdToAdd = selectNewAbility.value;
         if (!abilityIdToAdd) {
-            alert('Por favor, selecione uma habilidade para adicionar.');
+            alert('Por favor, selecione um Estilo/Talento para adicionar.');
             return;
         }
 
         const ability = allAbilities.find(ab => ab.id === abilityIdToAdd);
         if (player.habilidades.includes(ability.id)) {
-            alert('Este jogador já possui esta habilidade!');
+            alert('Este jogador já possui este Estilo/Talento!');
             return;
         }
 
         player.habilidades.push(ability.id);
         savePlayers();
         displayPlayerDetails(selectedPlayerId);
-        alert(`Habilidade "${ability.name}" adicionada a ${player.nome}.`);
+        alert(`Estilo/Talento "${ability.name}" adicionado a ${player.nome}.`);
     });
 
+    // --- Description Save Logic ---
     saveDescriptionBtn.addEventListener('click', () => {
         const player = getPlayerById(selectedPlayerId);
         if (!player) return;
@@ -421,8 +467,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
+    // --- Initial Event Listeners ---
     navButtons.forEach(button => {
         button.addEventListener('click', () => {
+            // Check if it's the 'Como Jogar' link (which is an <a>, not a <button>)
+            if (button.tagName === 'A') {
+                return; // Let the link handle navigation
+            }
             showSection(button.dataset.section);
             if (button.dataset.section === 'character-list-section') {
                 renderPlayers();
@@ -447,7 +498,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('classe').addEventListener('change', updateInitialSkills);
     document.getElementById('origem').addEventListener('change', updateInitialSkills);
 
-
+    // --- Character Creation Form Submission Logic ---
     characterForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
@@ -482,39 +533,37 @@ document.addEventListener('DOMContentLoaded', () => {
             atributos[key] = parseInt(attrInputs[key].value);
         }
 
-        // Crie um objeto de perícias começando com todas em 0
+        // Initialize all skills to 0
         const pericias = {};
         for (const key in skillInputs) {
-            pericias[key] = 0; // Inicializa todas como "Não Treinado"
+            pericias[key] = 0;
         }
 
-        // Aplica as perícias iniciais da classe como 'Treinado' (5)
+        // Apply initial class skills (free)
         const selectedClassInitialSkills = classePericiasIniciais[classe];
         if (selectedClassInitialSkills) {
             selectedClassInitialSkills.forEach(skillId => {
-                pericias[skillId] = 5;
+                pericias[skillId] = 5; // Set to Trained
             });
         }
 
-        // Aplica a perícia inicial da origem como 'Treinado' (5)
+        // Apply initial origin skill (free)
         const selectedOrigemData = origemPericiaBeneficio[origem];
         if (selectedOrigemData) {
-            const originSkillId = origemPericiaBeneficio[origem].pericia;
-            if (pericias[originSkillId] < 5) { // Só aplica se não for Treinado por Classe
+            const originSkillId = origemPericiaBeneficio[selectedOrigem].pericia;
+            if (pericias[originSkillId] < 5) { // Only if not already trained by class
                 pericias[originSkillId] = 5;
             }
         }
 
-        // Agora, aplica as escolhas do jogador (que consomem os 3 pontos)
+        // Apply player's custom skill choices
         for (const key in skillInputs) {
             const value = parseInt(skillInputs[key].value);
-            // Se o jogador selecionou Treinado (5) ou Especialista (10) para uma perícia:
-            // Sobrescreve o valor inicial (0) ou Treinado (5) se ele for para Especialista
-            if (value > pericias[key]) { // Garante que a escolha do jogador é aplicada
+            // If player chose a level higher than what was automatically set
+            if (value > pericias[key]) {
                 pericias[key] = value;
             }
         }
-
 
         const pv = 10 + atributos.vigor;
         let pe = 5 + atributos.presenca + atributos.intelecto;
@@ -522,6 +571,7 @@ document.addEventListener('DOMContentLoaded', () => {
             pe += 1;
         }
 
+        // Get initial class ability ID
         let initialAbilityId = '';
         switch(classe) {
             case 'Atacante': initialAbilityId = 'ataqueExplosivo'; break;
@@ -529,9 +579,7 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'Levantador': initialAbilityId = 'visaoDeAguia'; break;
             case 'Libero': initialAbilityId = 'defesaImpecavel'; break;
             case 'Oposto': initialAbilityId = 'contrarioFurioso'; break;
-            default: initialAbilityId = ''; break;
         }
-
 
         const newPlayer = {
             id: Date.now().toString(),
@@ -540,7 +588,7 @@ document.addEventListener('DOMContentLoaded', () => {
             origem,
             classe,
             atributos,
-            pericias, // Objeto de perícias final
+            pericias,
             pv: pv,
             currentPv: pv,
             pe: pe,
@@ -557,16 +605,15 @@ document.addEventListener('DOMContentLoaded', () => {
         savePlayers();
         renderPlayers();
         characterForm.reset();
-        updateInitialSkills(); // Reseta os selects para o estado inicial
+        updateInitialSkills(); // Reset skill dropdowns to initial state
         calculateAttributePoints();
-        // A função updateInitialSkills já chama calculateSkillPoints()
 
         alert(`Jogador ${nome} registrado com sucesso!`);
         showSection('character-list-section');
     });
 
-    // --- Inicialização ---
+    // --- Initialization ---
     renderPlayers();
     updateInitialSkills();
-    showSection('character-creation-section');
+    showSection('character-creation-section'); // Default to creation page on load
 });
