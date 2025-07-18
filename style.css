@@ -43,7 +43,7 @@ body {
 /* Efeito de sobreposição para a imagem de fundo */
 body::before {
     content: '';
-    position: absolute;
+    position: fixed; /* Alterado de absolute para fixed para cobrir toda a viewport */
     top: 0;
     left: 0;
     width: 100%;
@@ -62,6 +62,7 @@ header {
     position: sticky; /* Sticky header */
     top: 0;
     z-index: 1000; /* Garante que fique acima de outros elementos */
+    width: 100%; /* Garante que ocupe a largura total */
 }
 
 .header-content {
@@ -117,6 +118,7 @@ nav {
     gap: 8px;
     font-weight: 600;
     box-shadow: 0 2px 5px var(--shadow-light);
+    text-decoration: none; /* Para links, remover underline */
 }
 
 .nav-button:hover {
@@ -138,8 +140,8 @@ main {
     max-width: 1200px;
     margin: 30px auto;
     flex-grow: 1;
-    position: relative;
-    /* Para a transição das seções */
+    position: relative; /* For z-index context of sections */
+    /* For smoother transitions of page sections */
     perspective: 1000px;
 }
 
@@ -150,7 +152,7 @@ main {
     border-radius: 12px;
     box-shadow: 0 6px 15px var(--shadow-medium);
     border: 1px solid var(--border-color);
-    display: none;
+    display: none; /* Hidden by default */
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.5s ease-out, transform 0.5s ease-out;
@@ -533,13 +535,22 @@ textarea:focus {
 .attr-display-item,
 .skill-display-item,
 .ability-display-item {
-    /* ... suas propriedades existentes ... */
-    white-space: normal; /* Permite que o texto quebre linhas normalmente */
-    word-wrap: break-word; /* Garante que palavras longas quebrem */
-    max-width: 100%; /* Garante que o item não exceda a largura do pai */
-    box-sizing: border-box; /* Garante que padding e border sejam incluídos na largura */
-    border-radius: 15px;
+    background-color: var(--card-bg-color);
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-size: 0.95em;
+    border: 1px solid var(--border-color);
+    /* white-space: nowrap; REMOVIDO/AJUSTADO para permitir quebra de linha */
+    box-shadow: 0 1px 4px var(--shadow-light);
+    display: flex;
+    align-items: flex-start; /* Alinha ícone e texto no topo */
+    gap: 8px;
 }
+.ability-display-item {
+    flex-direction: column; /* Habilidades podem ter mais texto, então empilha */
+    align-items: stretch;
+}
+
 
 .attr-display-item strong, .skill-display-item strong {
     color: var(--heading-color);
@@ -556,6 +567,8 @@ textarea:focus {
     color: var(--text-color);
     flex-grow: 1; /* Para ocupar o espaço disponível */
     max-width: 100%; /* Garante que não ultrapasse */
+    white-space: normal; /* Permite que o texto quebre linhas normalmente */
+    word-wrap: break-word; /* Garante que palavras longas quebrem */
 }
 
 .ability-display-item strong {
@@ -729,6 +742,6 @@ footer p {
         font-size: 2em;
     }
     .nav-button {
-        width: 100%; /* Stack navigation buttons */
+        width: 100%;
     }
 }
